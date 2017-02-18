@@ -10,6 +10,7 @@ router.post('/', (req, res, next) => {
   var results = [];
 
   var data = {
+    accessToken: req.body.accessToken, 
     name: req.body.name, 
     affiliation: req.body.affiliation, 
     about: req.body.about, 
@@ -27,8 +28,8 @@ router.post('/', (req, res, next) => {
       return res.status(500).json({success: false, data: err});
     }
 
-    client.query('INSERT INTO users(name, affiliation, about, role, image, portfolio, chat_link) values($1, $2, $3, $4, $5, $6, $7) RETURNING id;',
-    [data.name, data.affiliation, data.about, data.role, data.image, data.portfolio, data.chat_link], function(err, result) {
+    client.query('INSERT INTO users(accessToken, name, affiliation, about, role, image, portfolio, chat_link) values($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id;',
+    [data.accessToken, data.name, data.affiliation, data.about, data.role, data.image, data.portfolio, data.chat_link], function(err, result) {
     	if(err) {
     		done();
     		console.log(err);
@@ -195,6 +196,72 @@ router.delete('/:user_id', (req, res, next) => {
         done();
         return res.json({id: id});
       }
+    });
+  });
+});
+
+//Add Course
+router.post('/courses/', (req, res, next) => {
+  var results = [];
+
+  var data = {
+    course_id: req.body.course_id,
+    user_id: req.body.user_id
+  };
+
+  pg.connect(connectionString, (err, client, done) => {
+
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+
+    client.query('INSERT INTO users_courses(course_id, user_id) values($1, $2);',
+    [data.course_id, data.user_id], function(err, result) {
+      if(err) {
+        done();
+        console.log(err);
+      } else {
+        var query = client.query('SELECT * FROM users_courses WHERE course_id=($1);', [data.course_id]);
+
+        query.on('row', (row) => {
+          results = row;
+        });
+
+        query.on('end', () => {
+          done();
+          console.log(results);
+          return res.json(results);
+        });
+      }
+    });
+  });
+});
+
+//Read courses
+router.get('/courses/:user_id', (req, res, next) => {
+  var results = [];
+
+  var user_id = req.params.user_id;
+
+  pg.connect(connectionString, (err, client, done) => {
+
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+
+    var query = client.query('SELECT * FROM users_courses WHERE user_id=($1);', [user_id]);
+    
+    query.on('row', (row) => {
+      results.push(row);
+    });
+    
+    query.on('end', () => {
+      done();
+      return res.json(results);
     });
   });
 });

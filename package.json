@@ -4,21 +4,31 @@
   "private": true,
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
+    "deploy": "node ./bin/www -t [ envify --NODE_ENV production ]",
     "server": "node ./bin/www",
     "supervisor": "supervisor ./bin/www",
-    "client": "cd lemon && npm start"
+    "client": "cd lemon && npm start",
+    "build": "cd lemon && npm run build"
   },
   "dependencies": {
+    "axios": "^0.15.3",
     "body-parser": "~1.15.2",
     "concurrently": "^3.1.0",
     "cookie-parser": "~1.4.3",
+    "cors": "^2.8.1",
     "debug": "~2.2.0",
+    "envify": "^4.0.0",
     "express": "~4.14.0",
+    "express-session": "^1.15.1",
+    "github": "^8.1.1",
     "jade": "~1.11.0",
     "moment": "^2.17.1",
     "morgan": "~1.7.0",
+    "passport": "^0.3.2",
+    "passport-github": "^1.1.0",
     "pg": "^6.1.2",
     "serve-favicon": "~2.3.0",
+    "superagent": "^3.4.1",
     "supervisor": "^0.12.0"
   }
 }

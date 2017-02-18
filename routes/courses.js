@@ -195,4 +195,70 @@ router.delete('/:course_id', (req, res, next) => {
     
   });
 });
+
+//Add Scholar
+router.post('/:user_id', (req, res, next) => {
+  var results = [];
+
+  var user_id = req.params.user_id;
+
+  var data = {
+    id: req.body.id
+  };
+
+  pg.connect(connectionString, (err, client, done) => {
+
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+
+    client.query('INSERT INTO users_courses(course_id, user_id) values($1, $2);',
+    [data.id, user_id], function(err, result) {
+      if(err) {
+        done();
+        console.log(err);
+      } else {
+        var query = client.query('SELECT * FROM users WHERE id=($1);', [user_id]);
+
+        query.on('row', (row) => {
+          results = row;
+        });
+
+        query.on('end', () => {
+          done();
+          return res.json(results);
+        });
+      }
+    });
+  });
+});
+
+//Read users
+router.get('/users/:course_id', (req, res, next) => {
+  var results = [];
+
+  var course_id = req.params.course_id;
+
+  pg.connect(connectionString, (err, client, done) => {
+
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+
+    var query = client.query('SELECT * FROM users_courses WHERE course_id=($1);', [course_id]);
+    
+    query.on('row', (row) => {
+      results.push(row);
+    });
+    
+    query.on('end', () => {
+      done();
+      return res.json(results);
+    });
+  });
+});
 module.exports = router;
