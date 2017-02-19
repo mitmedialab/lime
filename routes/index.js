@@ -8,11 +8,4 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-//Is authenticated
-router.get('/authenticated/', (req, res, next) => {
-
-  return res.json({authenticated: req.isAuthenticated()});
-
-});
-
 module.exports = router;

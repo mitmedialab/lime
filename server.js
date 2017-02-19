@@ -35,23 +35,26 @@ passport.use(
       chat_link: 'www.slack.com'
     }
 
-    var db_get_user_response = User.get_user(data.id);
+    User.get_user(data.id, function(error, results) {
 
-    if (db_get_user_response.error) {
-      return cb(db_get_user_response.error, null);
-    } else {
-      if (db_get_user_response.results) {
+      if (error) {
+        return cb(error, null);
+      }
+
+      if (results) {
         return cb(null, profile);
       } else {
-        var db_create_user_response = User.create_user(data);
+        User.create_user(data, function(err, result) {
+          if (err) {
+            return cb(err, null);
+          }
 
-        if (db_create_user_response.error) {
-          return cb(db_create_user_response.error, null);
-        } else {
-          return cb(null, profile);
-        }
+          if (result) {
+            return cb(null, profile);
+          }
+        });
       }
-    }
+    });
 }));
 
 passport.serializeUser(function(user, cb) {
