@@ -7,8 +7,10 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var request = require('request');
 
 var User = require('./models/User');
+var Github_API = require('./models/Github_API');
 var index = require('./routes/index');
 var courses = require('./routes/courses');
 var users = require('./routes/users');
@@ -31,7 +33,7 @@ passport.use(
       about: profile._json.bio,
       role: 'scholar',
       image: profile._json.avatar_url,
-      portfolio: profile._json.login+'.github.io',
+      portfolio: profile._json.login+'.github.io/lime-portfolio',
       chat_link: 'www.slack.com'
     }
 
@@ -50,7 +52,14 @@ passport.use(
           }
 
           if (result) {
-            return cb(null, profile);
+            Github_API.fork_portfolio(result.accesstoken, function(er, rest) {
+              if (er) {
+                return cb(er, null);
+              }
+              if (rest) {
+                return cb(null, profile);
+              }
+            }); 
           }
         });
       }
@@ -99,19 +108,17 @@ app.use(function(req, res, next) {
 });
 
 app.get('/auth/github', 
-  passport.authenticate('github', {scope: 'user'}));
+  passport.authenticate('github', {scope: ['user', 'public_repo']}));
 
 app.get('/auth/github/callback', 
   passport.authenticate('github', { failureRedirect: '/' }),
   function(req, res) {
     console.log('Successful login!');
-    console.log(req.isAuthenticated());
     res.redirect('/announcements');
   });
 
 app.get('/logout', function(req, res){
   req.logout();
-  console.log(req.isAuthenticated());
   res.redirect('/login');
 });
 
@@ -151,13 +158,9 @@ app.use(function(err, req, res, next) {
 });
 
 function ensureAuthenticated(req, res, next) {
-  console.log(req.isAuthenticated());
-  console.log(req.user);
   if (req.isAuthenticated()) { 
-    console.log("Hello"); 
     return next(); 
   }
-  console.log("Hi");
   res.redirect('/login');
 }
 
