@@ -5,15 +5,16 @@ const client = new pg.Client(connectionString);
 client.connect();
 const query = client.query(
   "CREATE TABLE users(																	\
-  		id 								Numeric 					NOT NULL,			\
-  		accessToken				TEXT							NOT NULL,			\
-	  	name 							TEXT				 			NOT NULL,			\
-	  	affiliation 			TEXT,														\
-	  	about 						TEXT,														\
-	  	role 							TEXT				 			NOT NULL,			\
-	  	image 						TEXT				 			NOT NULL,			\
-	  	portfolio 				TEXT 							NOT NULL,			\
-	  	chat_link 				TEXT 							NOT NULL,			\
+  		id 												Numeric 	NOT NULL,			\
+  		github_access_token				TEXT			NOT NULL,			\
+  		gitter_access_token				TEXT,										\
+	  	name 											TEXT		  NOT NULL,			\
+	  	affiliation 							TEXT,										\
+	  	about 										TEXT,										\
+	  	role 											TEXT			NOT NULL,			\
+	  	image 										TEXT			NOT NULL,			\
+	  	portfolio 								TEXT 			NOT NULL,			\
+	  	chat_link 								TEXT 			NOT NULL,			\
 	  	PRIMARY KEY (id)																	\
 	  );																									\
 																												\

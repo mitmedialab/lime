@@ -5,7 +5,8 @@ var User = require('../models/User');
 //Create User
 router.post('/', function (req, res, next) {
   var data = {
-    accessToken: req.body.accessToken,
+    github_access_token: req.body.github_access_token,
+    gitter_access_token: req.body.gitter_access_token,
     id: req.body.id, 
     name: req.body.name, 
     affiliation: req.body.affiliation, 
@@ -30,6 +31,20 @@ router.post('/', function (req, res, next) {
   });
 });
 
+//Read Users
+router.get('/current', function (req, res, next) {
+  console.log('req.session.passport.user.id');
+  // return res.status(500).json({success: false, data: 'Not Authenticated'});
+  // console.log(req.session.passport.user.id);
+  if (req.session.passport == undefined) {
+    // return res.json({user_id: '5400684'});
+    return res.status(500).json({success: false, data: 'Not Authenticated'});
+  } else {
+    return res.json({user_id: req.session.passport.user.id});
+  }
+
+});
+
 //Read User
 router.get('/:user_id', function (req, res, next) {
   var results = [];
@@ -48,7 +63,6 @@ router.get('/:user_id', function (req, res, next) {
       return res.json(results);
     }
   });
-
 });
 
 //Read Users

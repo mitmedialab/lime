@@ -15,11 +15,9 @@ module.exports.fork_portfolio = function(token, cb) {
     config
   ).then(function(res) {
     console.log('Success!');
-    console.log(res);
     cb(null, res.data);   
   }).catch(function(err) {
     console.log('Error!');
-    console.log(err.data);
     cb(err.data, null);    
   }); 
 }

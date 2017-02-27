@@ -15,8 +15,8 @@ module.exports.create_user = function(data, cb) {
     }
 
     console.log('about', data.about);
-    client.query('INSERT INTO users(accessToken, id, name, affiliation, about, role, image, portfolio, chat_link) values($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id;',
-    [data.accessToken, data.id, data.name, data.affiliation, data.about, data.role, data.image, data.portfolio, data.chat_link], function(err, result) {
+    client.query('INSERT INTO users(gitter_access_token, github_access_token, id, name, affiliation, about, role, image, portfolio, chat_link) values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id;',
+    [data.gitter_access_token, data.github_access_token, data.id, data.name, data.affiliation, data.about, data.role, data.image, data.portfolio, data.chat_link], function(err, result) {
       if(err) {
         done();
         console.log(err);
@@ -102,6 +102,11 @@ module.exports.update_user = function(id, data, cb) {
       console.log(err);
       error = err;
       cb(error, results);
+    }
+
+    if(data.gitter_access_token) {
+      client.query('UPDATE users SET gitter_access_token=($1) WHERE id=($2)',
+      [data.gitter_access_token, id]);
     }
 
     if(data.name) {
