@@ -19,7 +19,7 @@ module.exports = function (app) {
     new Strategy({
       clientID: githubClientId,
       clientSecret: githubClientSecret,
-      callbackURL: "http://127.0.0.1:3001/auth/github/callback"
+      callbackURL: "/auth/github/callback"
     },function(accessToken, refreshToken, profile, cb) {
       var data = {
         github_access_token: accessToken,

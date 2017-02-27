@@ -27,13 +27,13 @@ app.use('/api/v1/announcements', announcements);
 
 app.get('/logout', function(req, res){
   req.session.destroy();
-  res.redirect('/login');
+  res.redirect('/');
 });
 
 app.use(express.static(path.join(__dirname, '/public')));
 
 
-app.get('/login', ensureUnauthenticated,
+app.get('/', ensureUnauthenticated,
   function(req, res) {
     res.sendFile(path.join(__dirname+'/public/index.html'));
   });
@@ -72,7 +72,7 @@ function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { 
     return next(); 
   }
-  res.redirect('/login');
+  res.redirect('/');
 }
 
 function ensureUnauthenticated(req, res, next) {
