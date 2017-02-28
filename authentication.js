@@ -7,11 +7,11 @@ var User = require('./models/User');
 var Github_API = require('./models/Github_API');
 var Gitter_API = require('./models/Gitter_API');
 
-var githubClientId      = process.env.GITHUB_KEY ? process.env.GITHUB_KEY.trim() : "c62768a65dc854f5c218";
-var githubClientSecret  = process.env.GITHUB_SECRET ? process.env.GITHUB_SECRET.trim() : "ebcddb443c7ed157bfa86986b15163568ddd5aa3";
-
-var gitterClientId      = process.env.GITTER_KEY ? process.env.GITTER_KEY.trim() : "2079dcbbb18875d92d698ca634ccbddb1d250df3";
-var gitterClientSecret  = process.env.GITTER_SECRET ? process.env.GITTER_SECRET.trim() : "76ca07b7ca35fb324bcaf91f065318932663175d";
+var githubClientId = require('./config/index').githubClientId;
+var githubClientSecret = require('./config/index').githubClientSecret;
+var homepageUri = require('./config/index').homepageUri;
+var gitterClientId = require('./config/index').gitterClientId;
+var gitterClientSecret = require('./config/index').gitterClientSecret;
 
 module.exports = function (app) {
 
@@ -19,7 +19,7 @@ module.exports = function (app) {
     new Strategy({
       clientID: githubClientId,
       clientSecret: githubClientSecret,
-      callbackURL: "/auth/github/callback"
+      callbackURL: homepageUri+'/auth/github/callback'
     },function(accessToken, refreshToken, profile, cb) {
       var data = {
         github_access_token: accessToken,
@@ -69,7 +69,7 @@ module.exports = function (app) {
       tokenURL:           'https://gitter.im/login/oauth/token',
       clientID:           gitterClientId,
       clientSecret:       gitterClientSecret,
-      callbackURL:        '/auth/gitter/callback',
+      callbackURL:        'http://127.0.0.1:3001/auth/gitter/callback',
       passReqToCallback:  true 
     },function(req, accessToken, refreshToken, profile, done) {
       req.session.gitter_token = accessToken;

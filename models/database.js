@@ -1,9 +1,9 @@
-const pg = require('pg');
-const connectionString = process.env.DATABASE_URL || 'postgres://noor:noor@localhost:5432/lime';
+var pg = require('pg');
+var connectionString = require('../config/index').connectionString;
 
-const client = new pg.Client(connectionString);
+var client = new pg.Client(connectionString);
 client.connect();
-const query = client.query(
+var query = client.query(
   "CREATE TABLE users(																	\
   		id 												Numeric 	NOT NULL,			\
   		github_access_token				TEXT			NOT NULL,			\

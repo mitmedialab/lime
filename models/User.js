@@ -1,6 +1,6 @@
 var moment = require('moment');
 var pg = require('pg');
-var connectionString = require('../config/index');
+var connectionString = require('../config/index').connectionString;
 
 module.exports.create_user = function(data, cb) {
   var results = null;
