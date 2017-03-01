@@ -69,7 +69,7 @@ module.exports = function (app) {
       tokenURL:           'https://gitter.im/login/oauth/token',
       clientID:           gitterClientId,
       clientSecret:       gitterClientSecret,
-      callbackURL:        'http://127.0.0.1:3001/auth/gitter/callback',
+      callbackURL:        homepageUri+'/auth/gitter/callback',
       passReqToCallback:  true 
     },function(req, accessToken, refreshToken, profile, done) {
       req.session.gitter_token = accessToken;
