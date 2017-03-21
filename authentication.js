@@ -102,31 +102,4 @@ module.exports = function (app) {
 
   app.use(passport.initialize());
   app.use(passport.session());
-
-  app.get('/auth/github', 
-    passport.authenticate('github', {scope: ['user', 'public_repo']})
-  );
-
-  app.get('/auth/gitter', 
-    passport.authenticate('oauth2', {
-      successRedirect: '/announcements',
-      failureRedirect: '/'
-    })
-  );
-
-  app.get('/auth/github/callback', 
-    passport.authenticate('github', { failureRedirect: '/' }),
-    function(req, res) {
-      console.log('Successful login!');
-      res.redirect('/auth/gitter');
-    }
-  );
-
-  app.get('/auth/gitter/callback', 
-    passport.authenticate('oauth2', { failureRedirect: '/' }),
-    function(req, res) {
-      console.log('Successful login!');
-      res.redirect('/announcements');
-    }
-  );
 }

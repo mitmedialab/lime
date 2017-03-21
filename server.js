@@ -1,3 +1,4 @@
+//node modules
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -5,47 +6,66 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+//instantiate the app
+var app = express();
+//setup passport authentication
+var authentication = require('./authentication')(app);
+
+//require routes
 var index = require('./routes/index');
 var gitter = require('./routes/gitter');
 var courses = require('./routes/courses');
 var users = require('./routes/users');
 var announcements = require('./routes/announcements');
+var auth = require('./routes/auth');
 
-var app = express();
-var auth = require('./authentication')(app);
-
+//use middleware
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-// app.use('/', index);
+//setup middleware for auth routes 
+app.use('/auth', auth);
+
+//setup middleware for api routes
 app.use('/api/v1/gitter', gitter);
 app.use('/api/v1/courses', courses);
 app.use('/api/v1/users', users);
 app.use('/api/v1/announcements', announcements);
 
+//statically serve react build 
+app.use('/build', express.static(path.join(__dirname, '/lemon/build')));
+
+//send all urls following /build/ to the react app for react router to handle
+app.get('/build/*', 
+  function(req, res) {
+    res.sendFile(path.join(__dirname+'/lemon/build/index.html'));
+  });
+
+//logout the user and remove from sessions
 app.get('/logout', function(req, res){
   req.session.destroy();
   res.redirect('/');
 });
 
-app.use(express.static(path.join(__dirname, '/public')));
+//redirect react router paths to build/*
+app.get('/', function(req, res){
+  res.redirect('/build/');
+});
+app.get('/announcements', function(req, res){
+  res.redirect('/build/announcements');
+});
+app.get('/community', function(req, res){
+  res.redirect('/build/community');
+});
+app.get('/courses', function(req, res){
+  res.redirect('/build/courses');
+});
+app.get('/*', function(req, res){
+  res.redirect('/build/404');
+});
 
-
-app.get('/', ensureUnauthenticated,
-  function(req, res) {
-    res.sendFile(path.join(__dirname+'/public/index.html'));
-  });
-
-app.use('/', ensureAuthenticated);
-app.use('/', express.static(path.join(__dirname, '/lemon/build')));
-
-
-app.get('*', 
-  function(req, res) {
-    res.sendFile(path.join(__dirname+'/lemon/build/index.html'));
-  });
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -64,21 +84,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   // res.render('error');
 });
-
-app.use('/auth/styles', express.static(path.join(__dirname, '/lemon/build/styles')));
-
-
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) { 
-    return next(); 
-  }
-  res.redirect('/');
-}
-
-function ensureUnauthenticated(req, res, next) {
-  if (!req.isAuthenticated()) { 
-    return next(); 
-  }
-}
 
 module.exports = app;

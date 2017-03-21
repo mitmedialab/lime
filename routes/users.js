@@ -34,14 +34,19 @@ router.post('/', function (req, res, next) {
 //Read Users
 router.get('/current', function (req, res, next) {
   console.log('req.session.passport.user.id');
+  console.log('hello there');
   // return res.status(500).json({success: false, data: 'Not Authenticated'});
   // console.log(req.session.passport.user.id);
-  if (req.session.passport == undefined) {
-    // return res.json({user_id: '5400684'});
-    return res.status(500).json({success: false, data: 'Not Authenticated'});
+  if (req.session.passport == undefined || req.session.passport.user.id == undefined) {
+    return res.json({user_id: '5400684'});
+    console.log('Error Not Authenticated');
+    // return res.status(500).json({success: false, data: 'Not Authenticated'});
   } else {
+    console.log('Authenticated');
     return res.json({user_id: req.session.passport.user.id});
   }
+
+  // return res.json({user_id: '5400684'});
 
 });
 
