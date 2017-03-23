@@ -33,17 +33,31 @@ router.post('/', function (req, res, next) {
 
 //Read Users
 router.get('/current', function (req, res, next) {
-  console.log('req.session.passport.user.id');
-  console.log('hello there');
-  // return res.status(500).json({success: false, data: 'Not Authenticated'});
-  // console.log(req.session.passport.user.id);
   if (req.session.passport == undefined || req.session.passport.user.id == undefined) {
-    return res.json({user_id: '5400684'});
+    // return res.json({
+    //   user_id: '5400684',
+    //   role: 'admin'
+    // });
     console.log('Error Not Authenticated');
-    // return res.status(500).json({success: false, data: 'Not Authenticated'});
+    return res.status(500).json({success: false, data: 'Not Authenticated'});
   } else {
     console.log('Authenticated');
-    return res.json({user_id: req.session.passport.user.id});
+
+    User.get_user(req.session.passport.user.id, function(error, results) {
+      console.log('error', error);
+      console.log('get_user_results', JSON.stringify(results.role, null, 2));
+
+      if (error) {
+        return res.status(500).json({success: false, data: error});
+      }
+
+      if (results) {
+        return res.json({
+          user_id: req.session.passport.user.id,
+          role: results.role
+        });
+      }
+    });
   }
 
   // return res.json({user_id: '5400684'});
@@ -100,7 +114,10 @@ router.put('/:user_id', function (req, res, next) {
     chat_link: req.body.chat_link
   };
 
+  console.log(id);
+
   User.update_user(id, data, function(error, results) {
+    console.log('data', data);
     console.log('error', error);
     console.log('results', results);
 

@@ -104,43 +104,49 @@ module.exports.update_user = function(id, data, cb) {
       cb(error, results);
     }
 
+    // const keys = Object.keys(data);
+
+    // keys.forEach((key) => console.log(key+'='+data[key]));
+
     if(data.gitter_access_token) {
-      client.query('UPDATE users SET gitter_access_token=($1) WHERE id=($2)',
+      client.query('UPDATE users SET gitter_access_token=($1) WHERE id=($2);',
       [data.gitter_access_token, id]);
     }
 
     if(data.name) {
-      client.query('UPDATE users SET name=($1) WHERE id=($2)',
+      client.query('UPDATE users SET name=($1) WHERE id=($2);',
       [data.name, id]);
     }
 
     if(data.affiliation) {
-      client.query('UPDATE users SET affiliation=($1) WHERE id=($2)',
+      client.query('UPDATE users SET affiliation=($1) WHERE id=($2);',
       [data.affiliation, id]);
     }
 
     if(data.about) {
-      client.query('UPDATE users SET about=($1) WHERE id=($2)',
+      client.query('UPDATE users SET about=($1) WHERE id=($2);',
       [data.about, id]);
     }
 
     if(data.role) {
-      client.query('UPDATE users SET role=($1) WHERE id=($2)',
+      console.log('Hello');
+      client.query('UPDATE users SET role=($1) WHERE id=($2);',
       [data.role, id]);
+      console.log('The Query was executed');
     }
 
     if(data.image) {
-      client.query('UPDATE users SET image=($1) WHERE id=($2)',
+      client.query('UPDATE users SET image=($1) WHERE id=($2);',
       [data.image, id]);
     }
 
     if(data.portfolio) {
-      client.query('UPDATE users SET portfolio=($1) WHERE id=($2)',
+      client.query('UPDATE users SET portfolio=($1) WHERE id=($2);',
       [data.portfolio, id]);
     }
 
     if(data.chat_link) {
-      client.query('UPDATE users SET chat_link=($1) WHERE id=($2)',
+      client.query('UPDATE users SET chat_link=($1) WHERE id=($2);',
       [data.chat_link, id]);
     }
     
