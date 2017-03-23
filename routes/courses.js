@@ -92,6 +92,7 @@ router.put('/:course_id', function (req, res, next) {
 });
 
 //Delete Course
+//TODO: Need to also delete all relationships associated with it
 router.delete('/:course_id', function (req, res, next) {
   var id = req.params.course_id;
   
