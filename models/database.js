@@ -25,7 +25,7 @@ var query = client.query(
 	  	timestamp 				TEXT				 			NOT NULL,														\
 	  	user_id						INTEGER						NOT NULL,														\
 	  	PRIMARY KEY (id),																  											\
-	  	Foreign KEY (user_id) REFERENCES users(id)															\
+	  	Foreign KEY (user_id) REFERENCES users(id) ON DELETE CASCADE						\
 	  );																																				\
 																																							\
 		CREATE TABLE courses(																											\
