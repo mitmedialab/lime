@@ -27,6 +27,7 @@
     "node-gitter": "^2.0.5",
     "passport": "^0.3.2",
     "passport-github": "^1.1.0",
+    "passport-gitlab2": "^2.2.0",
     "passport-oauth2": "^1.4.0",
     "pg": "^6.1.2",
     "request": "^2.79.0",

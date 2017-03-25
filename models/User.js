@@ -15,8 +15,8 @@ module.exports.create_user = function(data, cb) {
     }
 
     console.log('about', data.about);
-    client.query('INSERT INTO users(gitter_access_token, github_access_token, id, name, affiliation, about, role, image, portfolio, chat_link) values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id;',
-    [data.gitter_access_token, data.github_access_token, data.id, data.name, data.affiliation, data.about, data.role, data.image, data.portfolio, data.chat_link], function(err, result) {
+    client.query('INSERT INTO users(gitlab_access_token, gitter_access_token, github_access_token, id, name, affiliation, about, role, image, portfolio, chat_link) values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING id;',
+    [data.gitlab_access_token, data.gitter_access_token, data.github_access_token, data.id, data.name, data.affiliation, data.about, data.role, data.image, data.portfolio, data.chat_link], function(err, result) {
       if(err) {
         done();
         console.log(err);

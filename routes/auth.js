@@ -3,6 +3,9 @@ var request = require('superagent');
 var router = express.Router();
 var passport = require('passport');
 
+router.get('/gitlab', 
+  passport.authenticate('gitlab', {scope: ['api']})
+);
 
 router.get('/github', 
   passport.authenticate('github', {scope: ['user', 'public_repo']})
@@ -13,6 +16,14 @@ router.get('/gitter',
     successRedirect: '/build/announcements',
     failureRedirect: '/'
   })
+);
+
+router.get('/gitlab/callback', 
+  passport.authenticate('gitlab', { failureRedirect: '/' }),
+  function(req, res) {
+    console.log('Successful login!');
+    res.redirect('/auth/gitter');
+  }
 );
 
 router.get('/github/callback', 

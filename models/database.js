@@ -6,15 +6,16 @@ client.connect();
 var query = client.query(
   "CREATE TABLE users(																												\
   		id 												Numeric 	NOT NULL,														\
-  		github_access_token				TEXT			NOT NULL,														\
+  		gitlab_access_token				TEXT			NOT NULL,														\
+  		github_access_token				TEXT,																					\
   		gitter_access_token				TEXT,																					\
 	  	name 											TEXT		  NOT NULL,														\
 	  	affiliation 							TEXT,																					\
 	  	about 										TEXT,																					\
 	  	role 											TEXT			NOT NULL,														\
 	  	image 										TEXT			NOT NULL,														\
-	  	portfolio 								TEXT 			NOT NULL,														\
-	  	chat_link 								TEXT 			NOT NULL,														\
+	  	portfolio 								TEXT,																					\
+	  	chat_link 								TEXT,																					\
 	  	PRIMARY KEY (id)																												\
 	  );																																				\
 																																							\

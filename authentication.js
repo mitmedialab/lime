@@ -2,18 +2,73 @@ var session = require('express-session');
 var passport = require('passport');
 var Strategy = require('passport-github').Strategy;
 var OAuth2Strategy  = require('passport-oauth2');
+var GitlabStrategy  = require('passport-gitlab2');
 
 var User = require('./models/User');
 var Github_API = require('./models/Github_API');
+var Gitlab_API = require('./models/Gitlab_API');
 var Gitter_API = require('./models/Gitter_API');
 
 var githubClientId = require('./config/index').githubClientId;
 var githubClientSecret = require('./config/index').githubClientSecret;
+var gitlabClientId = require('./config/index').gitlabClientId;
+var gitlabClientSecret = require('./config/index').gitlabClientSecret;
 var homepageUri = require('./config/index').homepageUri;
 var gitterClientId = require('./config/index').gitterClientId;
 var gitterClientSecret = require('./config/index').gitterClientSecret;
 
 module.exports = function (app) {
+
+  passport.use(
+    new GitlabStrategy({
+      clientID: gitlabClientId,
+      clientSecret: gitlabClientSecret,
+      callbackURL: homepageUri+'/auth/gitlab/callback'
+    },function(accessToken, refreshToken, profile, cb) {
+      // console.log('profile');
+      // console.log(profile);
+      var data = {
+        gitlab_access_token: accessToken,
+        id: profile._json.id,
+        name: profile._json.name,
+        affiliation: profile._json.organization,
+        about: profile._json.bio,
+        role: 'scholar',
+        image: profile._json.avatar_url,
+        portfolio: 'https://'+profile._json.username+'.gitlab.io/lime-portfolio',
+      }
+
+      User.get_user(data.id, function(error, results) {
+
+        if (error) {
+          return cb(error, null);
+        }
+
+        if (results) {
+          return cb(null, profile);
+        } else {
+          User.create_user(data, function(err, result) {
+            if (err) {
+              return cb(err, null);
+            }
+
+            if (result) {
+              console.log('Im about to fork');
+              Gitlab_API.fork_and_setup_portfolio(result.gitlab_access_token, result.name, profile._json.username, function(er, rest) {
+                if (er) {
+                  console.log('Error Forking: ', er);
+                  return cb(er, null);
+                }
+                if (rest) {
+                  console.log(rest);
+                  return cb(null, profile);
+                }
+              }); 
+            }
+          });
+        }
+      });
+  }));
 
   passport.use(
     new Strategy({
@@ -72,8 +127,10 @@ module.exports = function (app) {
       callbackURL:        homepageUri+'/auth/gitter/callback',
       passReqToCallback:  true 
     },function(req, accessToken, refreshToken, profile, done) {
+      console.log('req');
+      console.log(done);
       req.session.gitter_token = accessToken;
-      User.update_user(req.session.passport.user.id,{gitter_access_token: accessToken}, function(err, result) {
+      User.update_user(req.session.passport.user.id,{gitter_access_token: accessToken, chat_link: 'https://gitter.im/'+req.user.username}, function(err, result) {
         if (err) {
           return done(err, null);
         }
