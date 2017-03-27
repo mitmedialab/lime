@@ -120,25 +120,35 @@ exclude: ['README.md', 'Gemfile', 'Gemfile.lock', 'screenshot.png']"
 }
 
 module.exports.fork_and_setup_portfolio = function(token, name, username, cb) {
-  fork_portfolio(token, function(error, result) {
-    if(error) {
-      return cb(error, null);
+  get_project_id(token, function(e, proj_id) {
+    if(e) {
+      return cb(e, null);
     }
 
-    if (result) {
-      get_project_id(token, function(err, id) {
-        if (err) {
-          return cb(err, null);
+    if (proj_id) {
+      return cb(null, proj_id);
+    } else {
+      fork_portfolio(token, function(error, result) {
+        if(error) {
+          return cb(error, null);
         }
 
-        if (id) {
-          update_portfolio(token, id, name, username, function (er, res) {
-            if (er) {
-              return cb(er, null);
+        if (result) {
+          get_project_id(token, function(err, id) {
+            if (err) {
+              return cb(err, null);
             }
 
-            if (res) {
-              return cb(null, res);
+            if (id) {
+              update_portfolio(token, id, name, username, function (er, res) {
+                if (er) {
+                  return cb(er, null);
+                }
+
+                if (res) {
+                  return cb(null, res);
+                }
+              });
             }
           });
         }
