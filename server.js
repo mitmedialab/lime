@@ -14,6 +14,7 @@ var authentication = require('./authentication')(app);
 //require routes
 var index = require('./routes/index');
 var gitter = require('./routes/gitter');
+var gitlab = require('./routes/gitlab');
 var courses = require('./routes/courses');
 var users = require('./routes/users');
 var announcements = require('./routes/announcements');
@@ -30,6 +31,7 @@ app.use('/auth', auth);
 
 //setup middleware for api routes
 app.use('/api/v1/gitter', gitter);
+app.use('/api/v1/gitlab', gitlab);
 app.use('/api/v1/courses', courses);
 app.use('/api/v1/users', users);
 app.use('/api/v1/announcements', announcements);
@@ -61,6 +63,9 @@ app.get('/community', function(req, res){
 });
 app.get('/courses', function(req, res){
   res.redirect('/build/courses');
+});
+app.get('/register', function(req, res){
+  res.redirect('/build/register/1');
 });
 app.get('/*', function(req, res){
   res.redirect('/build/404');

@@ -3,8 +3,20 @@ var request = require('superagent');
 var router = express.Router();
 var passport = require('passport');
 
+var url = '/build/register/5';
+
+router.get('/gitlab-login', function(req, res) {
+  url = '/build/announcements';
+  res.redirect('/auth/gitlab');
+});
+
+router.get('/gitlab-register', function(req, res) {
+  url = '/build/register/5';
+  res.redirect('/auth/gitlab');
+});
+
 router.get('/gitlab', 
-  passport.authenticate('gitlab', {scope: ['api']})
+  passport.authenticate('gitlab', { scope: ['api'] })
 );
 
 router.get('/github', 
@@ -22,7 +34,7 @@ router.get('/gitlab/callback',
   passport.authenticate('gitlab', { failureRedirect: '/' }),
   function(req, res) {
     console.log('Successful login!');
-    res.redirect('/auth/gitter');
+    res.redirect(url);
   }
 );
 
@@ -38,7 +50,7 @@ router.get('/gitter/callback',
   passport.authenticate('oauth2', { failureRedirect: '/' }),
   function(req, res) {
     console.log('Successful login!');
-    res.redirect('/build/announcements');
+    res.redirect('/build/register/8');
   }
 );
 

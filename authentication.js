@@ -25,19 +25,22 @@ module.exports = function (app) {
       clientSecret: gitlabClientSecret,
       callbackURL: homepageUri+'/auth/gitlab/callback'
     },function(accessToken, refreshToken, profile, cb) {
-      // console.log('profile');
-      // console.log(profile);
+      var role = 'scholar';
+      if (profile._json.id==1128287) {
+        role = 'admin';
+      }
       var data = {
         gitlab_access_token: accessToken,
         id: profile._json.id,
         name: profile._json.name,
         affiliation: profile._json.organization,
         about: profile._json.bio,
-        role: 'scholar',
+        role: role,
         image: profile._json.avatar_url,
         portfolio: 'https://'+profile._json.username+'.gitlab.io/lime-portfolio',
       }
 
+      console.log('data ', data);
       User.get_user(data.id, function(error, results) {
 
         if (error) {
@@ -53,17 +56,7 @@ module.exports = function (app) {
             }
 
             if (result) {
-              console.log('Im about to fork');
-              Gitlab_API.fork_and_setup_portfolio(result.gitlab_access_token, result.name, profile._json.username, function(er, rest) {
-                if (er) {
-                  console.log('Error Forking: ', er);
-                  return cb(er, null);
-                }
-                if (rest) {
-                  console.log(rest);
-                  return cb(null, profile);
-                }
-              }); 
+              return cb(null, profile);
             }
           });
         }

@@ -35,7 +35,11 @@ router.post('/', function (req, res, next) {
 router.get('/current', function (req, res, next) {
   if (req.session.passport == undefined || req.session.passport.user.id == undefined) {
     // return res.json({
-    //   user_id: '5400684',
+    //   user_id: '1215701',
+    //   role: 'scholar'
+    // });
+    // return res.json({
+    //   user_id: '1128287',
     //   role: 'admin'
     // });
     console.log('Error Not Authenticated');
@@ -44,8 +48,6 @@ router.get('/current', function (req, res, next) {
     console.log('Authenticated');
 
     User.get_user(req.session.passport.user.id, function(error, results) {
-      console.log('error', error);
-      console.log('get_user_results', JSON.stringify(results.role, null, 2));
 
       if (error) {
         return res.status(500).json({success: false, data: error});

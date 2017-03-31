@@ -114,15 +114,16 @@ ALTER SEQUENCE courses_id_seq OWNED BY courses.id;
 
 CREATE TABLE users (
     id numeric NOT NULL,
-    github_access_token text NOT NULL,
+    gitlab_access_token text NOT NULL,
+    github_access_token text,
     gitter_access_token text,
     name text NOT NULL,
     affiliation text,
     about text,
     role text NOT NULL,
     image text NOT NULL,
-    portfolio text NOT NULL,
-    chat_link text NOT NULL
+    portfolio text,
+    chat_link text
 );
 
 
@@ -159,6 +160,7 @@ ALTER TABLE ONLY courses ALTER COLUMN id SET DEFAULT nextval('courses_id_seq'::r
 --
 
 COPY announcements (id, header, message, "timestamp", user_id) FROM stdin;
+1	Welcome to LIME	On Behalf of the Media Lab Learning Initiative we would like to welcome you to LIME: Learning Innovators - Middle East. Welcome to our set of scholars and innovators. </br></br> LIME is platform where you can take online courses relating to learning, innovation and technology. Check out the courses tab to see the set of courses that we offer. </br></br> LIME is a community where you can collaborate with other scholars on courses. We encourage you to checkout the community tab to see who is part of LIME the community. We encourage you to collaborate with others in the community on projects.	Saturday, April 1, 2017 12:58 AM	1128287
 \.
 
 
@@ -166,7 +168,7 @@ COPY announcements (id, header, message, "timestamp", user_id) FROM stdin;
 -- Name: announcements_id_seq; Type: SEQUENCE SET; Schema: public; Owner: noor
 --
 
-SELECT pg_catalog.setval('announcements_id_seq', 1, false);
+SELECT pg_catalog.setval('announcements_id_seq', 1, true);
 
 
 --
@@ -174,10 +176,11 @@ SELECT pg_catalog.setval('announcements_id_seq', 1, false);
 --
 
 COPY courses (id, title, source, description, image, course_link, chat_link) FROM stdin;
+1	Free Code Camp	freecodecamp.com	Free Code Camp is an open source community where you learn to code full stack JavaScript and help nonprofits through self-paced coding challenges.  	https://qph.ec.quoracdn.net/main-qimg-403f76f93a17b887ddf92cb372136b64	https://www.freecodecamp.com/map	https://gitter.im/ML-LIME/FCC
 2	Swift: Building iOS Apps	Flatiron School	We’ll start with the fundamentals of Swift and move on to more advanced topics like Higher Order Functions, Protocols, and Extensions. Write, run, and view your code in Xcode and learn how to read warning and error messages. Use Interface Builder and Auto Layout to build interactive, visually stunning applications.	https://flatironschool.imgix.net/online-swift/build-ios-applications-v2.jpg?fit=crop&crop=entropy	https://flatironschool.com/programs/online-swift-free-course/	https://gitter.im/ML-LIME/Swift
-3	UX Design for Mobile Developers	Udacity	This course is optimized for the developer who is looking to efficiently learn the most important design techniques that will help them make better apps (with a focus on mobile/Android). This is a UX design course built for current (and aspiring) mobile developers. In this short course, you'll step back from your IDE and dive into the techniques that great designers use to plan and prototype amazing apps before any code is written.	https://www.udacity.com/assets/pages/cop/nd801-366a1965b856969997591244b5bad242a2bc5f91f72f0c4275a53ed1d600406a.jpg	https://www.udacity.com/course/ux-design-for-mobile-developers--ud849	https://gitter.im/ML-LIME/UX-Design
-4	Intro to JavaScript	Flatiron School	You’ll build a Konami code program and a working game in JavaScript (and we promise it’s not yet-another-Blackjack clone!). You’ll also master the latest JavaScript syntax and techniques, an essential base for launching into further learning.	https://flatironschool.imgix.net/online-intro-to-javascript-free/course-graphics-expand-your-skills.jpg?fit=crop&crop=entropy	https://flatironschool.com/programs/online-intro-javascript-free-course/	https://gitter.im/ML-LIME/JavaScript
-1	How to Create Anything in Android	Udacity	Here is one important question Android developers ask while making apps: 'How can I do ________ in Android?' The following are versions of this question that we came across recently: How can I add radio buttons to my app? How can I play a sound? How can I navigate between multiple screens? This course is a collection of such questions and their answers. By the end of this course you will have mastered the ability to implement new Android features by reading a blog or article — this is a critical skill possessed by professional Android developers. As a result, you will also be able to use several User Interface components — like Toggle Buttons, Menus, Grid View and many more — that are central to making functional and delightful Android apps.	https://www.udacity.com/assets/pages/cop/nd801-366a1965b856969997591244b5bad242a2bc5f91f72f0c4275a53ed1d600406a.jpg	https://www.udacity.com/course/how-to-create-anything-in-android--ud802	https://gitter.im/ML-LIME/Android
+3	Intro to JavaScript	Flatiron School	You’ll build a Konami code program and a working game in JavaScript (and we promise it’s not yet-another-Blackjack clone!). You’ll also master the latest JavaScript syntax and techniques, an essential base for launching into further learning.	https://flatironschool.imgix.net/online-intro-to-javascript-free/course-graphics-expand-your-skills.jpg?fit=crop&crop=entropy	https://flatironschool.com/programs/online-intro-javascript-free-course/	https://gitter.im/ML-LIME/JavaScript
+4	How to Create Anything in Android	Udacity	Here is one important question Android developers ask while making apps: 'How can I do ________ in Android?' The following are versions of this question that we came across recently: How can I add radio buttons to my app? How can I play a sound? How can I navigate between multiple screens? This course is a collection of such questions and their answers. </br></br>By the end of this course you will have mastered the ability to implement new Android features by reading a blog or article — this is a critical skill possessed by professional Android developers. As a result, you will also be able to use several User Interface components — like Toggle Buttons, Menus, Grid View and many more — that are central to making functional and delightful Android apps.	https://d125fmws0bore1.cloudfront.net/assets/udacity_share-46db4b8faf075a5af5a1070a7fa0ad3639783609ff45f447e4ea467fe3aa9d32.png	https://www.udacity.com/course/how-to-create-anything-in-android--ud802	https://gitter.im/ML-LIME/Android
+5	UX Design for Mobile Developers	Udacity	This course is optimized for the developer who is looking to efficiently learn the most important design techniques that will help them make better apps (with a focus on mobile/Android). This is a UX design course built for current (and aspiring) mobile developers. </br></br>In this short course, you'll step back from your IDE and dive into the techniques that great designers use to plan and prototype amazing apps before any code is written.	https://s3-us-west-1.amazonaws.com/udacity-content/degrees/catalog-images/Android.png	https://www.udacity.com/course/ux-design-for-mobile-developers--ud849	https://gitter.im/ML-LIME/UX-Design
 \.
 
 
@@ -185,15 +188,16 @@ COPY courses (id, title, source, description, image, course_link, chat_link) FRO
 -- Name: courses_id_seq; Type: SEQUENCE SET; Schema: public; Owner: noor
 --
 
-SELECT pg_catalog.setval('courses_id_seq', 4, true);
+SELECT pg_catalog.setval('courses_id_seq', 5, true);
 
 
 --
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: noor
 --
 
-COPY users (id, github_access_token, gitter_access_token, name, affiliation, about, role, image, portfolio, chat_link) FROM stdin;
-5400684	a2799df4a0dd67cffa2046c72d8230b468a64a50	12df54fe34d763093dac4558941f8c0852cece11	Noor Eddin Amer	\N	\N	scholar	https://avatars.githubusercontent.com/u/5400684?v=3	https://nooralasa.github.io/lime-portfolio	https://gitter.im/nooralasa
+COPY users (id, gitlab_access_token, github_access_token, gitter_access_token, name, affiliation, about, role, image, portfolio, chat_link) FROM stdin;
+1215701	19abc75019de207776962717a32df14e5ab94af9562a3fb3e5a0a640e55703d2	\N	5a16cf4b92329fa398c344b07c68d07fda66ffe4	Ben Bitdiddle 	MIT	Ben Bitdiddle is a fictional character created by Steve Ward. Ben was used in problem sets for MIT's 6.031, in the 1970s. He has since appeared in a large number of other locations, including other classes at MIT and other institutions.	scholar	https://secure.gravatar.com/avatar/eec1be0d974239bf6bc7e2fe7f69a5ba?s=80&d=identicon	https://benbitdiddle12.gitlab.io/lime-portfolio	https://gitter.im/benbitdiddle12
+1128287	7a60de64f733fc6fe9f3e28050f093680558c07a1a22a3d7a6e78403b905c068	\N	12df54fe34d763093dac4558941f8c0852cece11	Noor Eddin Amer	MIT Media Lab	Noor is a graduate student and research assistant with the Learning Initiative at the MIT Media Lab, pursuing a degree in Computer Engineering. Noor grew up in Jordan and travels frequently to the region. 	admin	https://gitlab.com/uploads/user/avatar/1128287/avatar.png	https://nooralasa.gitlab.io/lime-portfolio	https://gitter.im/nooralasa
 \.
 
 
@@ -202,9 +206,6 @@ COPY users (id, github_access_token, gitter_access_token, name, affiliation, abo
 --
 
 COPY users_courses (course_id, user_id) FROM stdin;
-1	5400684
-2	5400684
-3	5400684
 \.
 
 
@@ -245,7 +246,7 @@ ALTER TABLE ONLY users
 --
 
 ALTER TABLE ONLY announcements
-    ADD CONSTRAINT announcements_user_id_fkey FOREIGN KEY (user_id) REFERENCES users(id);
+    ADD CONSTRAINT announcements_user_id_fkey FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
 
 
 --
@@ -253,7 +254,7 @@ ALTER TABLE ONLY announcements
 --
 
 ALTER TABLE ONLY users_courses
-    ADD CONSTRAINT users_courses_course_id_fkey FOREIGN KEY (course_id) REFERENCES courses(id);
+    ADD CONSTRAINT users_courses_course_id_fkey FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE;
 
 
 --
@@ -261,7 +262,7 @@ ALTER TABLE ONLY users_courses
 --
 
 ALTER TABLE ONLY users_courses
-    ADD CONSTRAINT users_courses_user_id_fkey FOREIGN KEY (user_id) REFERENCES users(id);
+    ADD CONSTRAINT users_courses_user_id_fkey FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
 
 
 --
