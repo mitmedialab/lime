@@ -16,10 +16,6 @@ var Gitter = require('node-gitter');
  * 
 **/
 
-var noors_token = '12df54fe34d763093dac4558941f8c0852cece11';
-var bens_token = '5a16cf4b92329fa398c344b07c68d07fda66ffe4'; 
-var bens_id = '58ae0018d73408ce4f4c3c78';
-
 // function make_request(method, path, token, data, cb) {
 //   var options = {
 //     method: method,

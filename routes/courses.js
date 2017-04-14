@@ -96,7 +96,7 @@ router.put('/:course_id', function (req, res, next) {
 router.delete('/:course_id', function (req, res, next) {
   var id = req.params.course_id;
   
-  Course.delete_course(id, function(error, results) {
+  Course.soft_delete_course(id, function(error, results) {
     console.log('error', error);
     console.log('results', results);
 

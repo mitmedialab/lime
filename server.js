@@ -17,6 +17,7 @@ var gitter = require('./routes/gitter');
 var gitlab = require('./routes/gitlab');
 var courses = require('./routes/courses');
 var users = require('./routes/users');
+var activities = require('./routes/activities');
 var announcements = require('./routes/announcements');
 var auth = require('./routes/auth');
 
@@ -34,6 +35,7 @@ app.use('/api/v1/gitter', gitter);
 app.use('/api/v1/gitlab', gitlab);
 app.use('/api/v1/courses', courses);
 app.use('/api/v1/users', users);
+app.use('/api/v1/activities', activities);
 app.use('/api/v1/announcements', announcements);
 
 //statically serve react build 
@@ -66,6 +68,9 @@ app.get('/courses', function(req, res){
 });
 app.get('/register', function(req, res){
   res.redirect('/build/register/1');
+});
+app.get('/activities', function(req, res){
+  res.redirect('/build/activities');
 });
 app.get('/*', function(req, res){
   res.redirect('/build/404');

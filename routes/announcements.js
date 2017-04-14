@@ -86,7 +86,7 @@ router.put('/:announcement_id', function (req, res, next) {
 router.delete('/:announcement_id', function (req, res, next) {
   var id = req.params.announcement_id;
   
-  Announcement.delete_announcement(id, function(error, results) {
+  Announcement.soft_delete_announcement(id, function(error, results) {
     console.log('error', error);
     console.log('results', results);
 

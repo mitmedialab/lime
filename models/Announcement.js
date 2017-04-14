@@ -81,7 +81,7 @@ module.exports.get_announcements = function(cb) {
       cb(error, results);
     }
 
-    var query = client.query('SELECT * FROM announcements ORDER BY id ASC;');
+    var query = client.query('SELECT * FROM announcements WHERE deleted=FALSE ORDER BY id ASC;');
     
     query.on('row', (row) => {
       results.push(row);
@@ -135,6 +135,35 @@ module.exports.update_announcement = function(id, data, cb) {
     query.on('end', () => {
       done();
       cb(error, results);
+    });
+  });  
+}
+
+module.exports.soft_delete_announcement = function(id, cb) {
+  var results = null;
+  var error = null;
+
+  pg.connect(connectionString, function (err, client, done) {
+    
+    if(err) {
+      done();
+      console.log(err);
+      error = err;
+      cb(error, results);
+    }
+
+    client.query('UPDATE announcements SET deleted=($1) WHERE id=($2)',
+      [true, id], function(err) {
+      if (err) {
+        done();
+        console.log(err);
+        error = err;
+        cb(error, results);
+      } else {
+        done();
+        results = {id: id};
+        cb(error, results);
+      }
     });
   });  
 }

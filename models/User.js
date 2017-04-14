@@ -78,7 +78,7 @@ module.exports.get_users = function(cb) {
       cb(error, results);
     }
 
-    var query = client.query('SELECT * FROM users ORDER BY id ASC;');
+    var query = client.query('SELECT * FROM users WHERE deleted=FALSE ORDER BY id ASC;');
     
     query.on('row', (row) => {
       results.push(row);
@@ -103,10 +103,6 @@ module.exports.update_user = function(id, data, cb) {
       error = err;
       cb(error, results);
     }
-
-    // const keys = Object.keys(data);
-
-    // keys.forEach((key) => console.log(key+'='+data[key]));
 
     if(data.gitter_access_token) {
       client.query('UPDATE users SET gitter_access_token=($1) WHERE id=($2);',
@@ -161,6 +157,39 @@ module.exports.update_user = function(id, data, cb) {
       cb(error, results);
     });
   });
+}
+
+module.exports.soft_delete_user = function(id, cb) {
+  var results = null;
+  var error = null;
+
+  pg.connect(connectionString, function (err, client, done) {
+    
+    if(err) {
+      done();
+      console.log(err);
+      error = err;
+      cb(error, results);
+    }
+
+    client.query('UPDATE users SET deleted=($1) WHERE id=($2)',
+      [true, id], function(err) {
+      if (err) {
+        done();
+        console.log(err);
+        error = err;
+        cb(error, results);
+      } else {
+        var query = client.query('UPDATE users_courses SET deleted=($1) WHERE user_id=($2);', [true, id]);
+        
+        query.on('end', () => {
+          done();
+          results = {id: id};
+          cb(error, results);
+        });
+      }
+    });
+  });  
 }
 
 module.exports.delete_user = function(id, cb) {
@@ -239,7 +268,68 @@ module.exports.get_user_courses = function(user_id, cb) {
       cb(error, results);
     }
 
-    var query = client.query('SELECT * FROM users_courses WHERE user_id=($1);', [user_id]);
+    var query = client.query('SELECT * FROM users_courses WHERE user_id=($1) AND deleted=FALSE;', [user_id]);
+    
+    query.on('row', (row) => {
+      results.push(row);
+    });
+    
+    query.on('end', () => {
+      done();
+      cb(error, results);
+    });
+  });
+}
+
+module.exports.add_activity_to_user = function(data, cb) {
+  var results = null;
+  var error = null;
+
+  pg.connect(connectionString, (err, client, done) => {
+
+    if(err) {
+      done();
+      console.log(err);
+      error = err;
+      cb(error, results);
+    }
+
+    client.query('INSERT INTO users_activities(activity_id, user_id) values($1, $2);',
+    [data.activity_id, data.user_id], function(err, result) {
+      if(err) {
+        done();
+        console.log(err);
+        cb(error, results);
+      } else {
+        var query = client.query('SELECT * FROM users_activities WHERE activity_id=($1);', [data.activity_id]);
+
+        query.on('row', (row) => {
+          results = row;
+        });
+
+        query.on('end', () => {
+          done();
+          cb(error, results);
+        });
+      }
+    });
+  });
+}
+
+module.exports.get_user_activities = function(user_id, cb) {
+  var results = [];
+  var error = null;
+
+  pg.connect(connectionString, (err, client, done) => {
+
+    if(err) {
+      done();
+      console.log(err);
+      error = err;
+      cb(error, results);
+    }
+
+    var query = client.query('SELECT * FROM users_activities WHERE user_id=($1);', [user_id]);
     
     query.on('row', (row) => {
       results.push(row);

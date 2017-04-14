@@ -5,6 +5,7 @@ var User = require('../models/User');
 //Create User
 router.post('/', function (req, res, next) {
   var data = {
+    gitlab_access_token: req.body.gitlab_access_token,
     github_access_token: req.body.github_access_token,
     gitter_access_token: req.body.gitter_access_token,
     id: req.body.id, 
@@ -34,10 +35,10 @@ router.post('/', function (req, res, next) {
 //Read Users
 router.get('/current', function (req, res, next) {
   if (req.session.passport == undefined || req.session.passport.user.id == undefined) {
-    // return res.json({
-    //   user_id: '1215701',
-    //   role: 'scholar'
-    // });
+    return res.json({
+      user_id: '1215701',
+      role: 'scholar'
+    });
     // return res.json({
     //   user_id: '1128287',
     //   role: 'admin'
@@ -137,7 +138,7 @@ router.put('/:user_id', function (req, res, next) {
 router.delete('/:user_id', function (req, res, next) {
   var id = req.params.user_id;
   
-  User.delete_user(id, function(error, results) {
+  User.soft_delete_user(id, function(error, results) {
     console.log('error', error);
     console.log('results', results);
 
