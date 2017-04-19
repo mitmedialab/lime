@@ -22,13 +22,13 @@ module.exports.create_activity = function(data, cb) {
         console.log(err);
       } else {
 
-        if (data.requirementsList) {
+        if (data.requirementsList && data.requirementsList.length>0) {
           data.requirementsList.forEach(function(req_description) {
             module.exports.add_activity_requirement({description: req_description, activity_id: parseInt([result['rows'][0]['id']], 10)}, function() {return});
           });
         }
 
-        if (data.objectivesList) {
+        if (data.objectivesList && data.objectivesList.length>0) {
           data.objectivesList.forEach(function(obj_description) {
             module.exports.add_activity_objective({description: obj_description, activity_id: parseInt([result['rows'][0]['id']], 10)}, function() {return});
           });
@@ -147,6 +147,22 @@ module.exports.update_activity = function(id, data, cb) {
 
     client.query('UPDATE activities SET timestamp=($1) WHERE id=($2)',
     [moment().format('LLLL'), id]);
+
+    if(data.requirementsList && data.requirementsList.length>0) {
+      module.exports.soft_delete_activity_requirements(id, function(err, results) {
+        data.requirementsList.forEach(function(req_description) {
+          module.exports.add_activity_requirement({description: req_description, activity_id: parseInt(id, 10)}, function() {return});
+        });
+      })
+    }
+
+    if(data.objectivesList && data.objectivesList.length>0) {
+      module.exports.soft_delete_activity_objectives(id, function(err, results) {
+        data.objectivesList.forEach(function(obj_description) {
+          module.exports.add_activity_objective({description: obj_description, activity_id: parseInt(id, 10)}, function() {return});
+        });
+      })
+    }
     
     var query = client.query("SELECT * FROM activities WHERE id=($1);", [id]);
 
@@ -261,6 +277,34 @@ module.exports.add_activity_requirement = function(data, cb) {
       }
     });
   });
+}
+
+module.exports.soft_delete_activity_requirements = function(id, cb) {
+  var results = null;
+  var error = null;
+
+  pg.connect(connectionString, function (err, client, done) {
+    
+    if(err) {
+      done();
+      console.log(err);
+      error = err;
+      cb(error, results);
+    }
+
+    client.query('UPDATE requirements SET deleted=($1) WHERE activity_id=($2) RETURNING activity_id;',
+      [true, id], function(err, results) {
+      if (err) {
+        done();
+        console.log(err);
+        error = err;
+        cb(error, results);
+      } else {
+        done();
+        cb(error, results);
+      }
+    });
+  });  
 }
 
 module.exports.get_activity_requirements = function(activity_id, cb) {
@@ -468,6 +512,34 @@ module.exports.add_activity_objective = function(data, cb) {
       }
     });
   });
+}
+
+module.exports.soft_delete_activity_objectives = function(id, cb) {
+  var results = null;
+  var error = null;
+
+  pg.connect(connectionString, function (err, client, done) {
+    
+    if(err) {
+      done();
+      console.log(err);
+      error = err;
+      cb(error, results);
+    }
+
+    client.query('UPDATE objectives SET deleted=($1) WHERE activity_id=($2) RETURNING activity_id;',
+      [true, id], function(err, results) {
+      if (err) {
+        done();
+        console.log(err);
+        error = err;
+        cb(error, results);
+      } else {
+        done();
+        cb(error, results);
+      }
+    });
+  });  
 }
 
 module.exports.get_activity_objectives = function(activity_id, cb) {

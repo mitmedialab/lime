@@ -55,7 +55,10 @@ router.put('/:activity_id', function (req, res, next) {
     title: req.body.title,           
     description: req.body.description,     
     example: req.body.example,         
-    image: req.body.image,           
+    image: req.body.image, 
+    chat_link: req.body.chat_link,
+    requirementsList: req.body.requirementsList,
+    objectivesList: req.body.objectivesList,          
     chat_link: req.body.chat_link,      
     expert_id: req.body.expert_id,
     course_id: req.body.course_id
