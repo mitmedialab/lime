@@ -15,12 +15,24 @@ module.exports.create_activity = function(data, cb) {
       cb(error, results);
     }
 
-    client.query('INSERT INTO activities(title, description, example, image, chat_link, timestamp, expert_id, course_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id;',
-    [data.title, data.description, data.example, data.image, data.chat_link, moment().format('LLLL'), data.expert_id, data.course_id], function(err, result) {
+    client.query('INSERT INTO activities(title, description, image, chat_link, timestamp, expert_id, course_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id;',
+    [data.title, data.description, data.image, data.chat_link, moment().format('LLLL'), data.expert_id, data.course_id], function(err, result) {
       if(err) {
         done();
         console.log(err);
       } else {
+
+        if (data.requirementsList) {
+          data.requirementsList.forEach(function(req_description) {
+            module.exports.add_activity_requirement({description: req_description, activity_id: parseInt([result['rows'][0]['id']], 10)}, function() {return});
+          });
+        }
+
+        if (data.objectivesList) {
+          data.objectivesList.forEach(function(obj_description) {
+            module.exports.add_activity_objective({description: obj_description, activity_id: parseInt([result['rows'][0]['id']], 10)}, function() {return});
+          });
+        }
 
         var query = client.query('SELECT * FROM activities WHERE id=($1);', [result['rows'][0]['id']]);
 
@@ -121,11 +133,6 @@ module.exports.update_activity = function(id, data, cb) {
     if(data.chat_link) {
       client.query('UPDATE activities SET chat_link=($1) WHERE id=($2)',
       [data.chat_link, id]);
-    }
-
-    if(data.example) {
-      client.query('UPDATE activities SET example=($1) WHERE id=($2)',
-      [data.example, id]);
     }
 
     if(data.expert_id) {

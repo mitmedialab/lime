@@ -42,7 +42,6 @@ CREATE TABLE activities (
     id integer NOT NULL,
     title text NOT NULL,
     description text,
-    example text,
     image text,
     chat_link text,
     "timestamp" text,
@@ -343,8 +342,8 @@ ALTER TABLE ONLY submissions ALTER COLUMN id SET DEFAULT nextval('submissions_id
 -- Data for Name: activities; Type: TABLE DATA; Schema: public; Owner: noor
 --
 
-COPY activities (id, title, description, example, image, chat_link, "timestamp", course_id, expert_id, deleted) FROM stdin;
-1	Recipe Page	The food you eat reveals a lot about your roots and personal identity. Pick a significant dish that reminds you of home and create an app that features information about it you would like to share (ex: cultural significance, history/region of origin, recipe and preparation, etc).	\N	http://img.clipartall.com/free-recipe-sheet-clip-art-recipe-clip-art-800_683.png	https://gitter.im/ML-LIME/Android-Beginners	Monday, April 10, 2017 3:11 PM	6	1128287	f
+COPY activities (id, title, description, image, chat_link, "timestamp", course_id, expert_id, deleted) FROM stdin;
+1	Recipe Page	The food you eat reveals a lot about your roots and personal identity. Pick a significant dish that reminds you of home and create an app that features information about it you would like to share (ex: cultural significance, history/region of origin, recipe and preparation, etc).	http://img.clipartall.com/free-recipe-sheet-clip-art-recipe-clip-art-800_683.png	https://gitter.im/ML-LIME/Android-Beginners	Monday, April 10, 2017 3:11 PM	6	1128287	f
 \.
 
 

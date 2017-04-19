@@ -56,7 +56,6 @@ var query = client.query(
 	  	id 								SERIAL 						NOT NULL,																			\
 	  	title 						TEXT				 			NOT NULL,																			\
 	  	description 			TEXT,																														\
-	  	example			 			TEXT,																														\
 	  	image 						TEXT,																														\
 	  	chat_link 				TEXT,																														\
 	  	timestamp 				TEXT,																														\
