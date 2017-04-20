@@ -232,3 +232,29 @@ module.exports.get_course_users = function(course_id, cb) {
     });
   });
 }
+
+module.exports.get_course_activities = function(course_id, cb) {
+  var results = [];
+  var error = null;
+
+  pg.connect(connectionString, (err, client, done) => {
+
+    if(err) {
+      done();
+      console.log(err);
+      error = err;
+      cb(error, results);
+    }
+
+    var query = client.query('SELECT * FROM activities WHERE course_id=($1) AND deleted=FALSE;', [course_id]);
+    
+    query.on('row', (row) => {
+      results.push(row);
+    });
+    
+    query.on('end', () => {
+      done();
+      cb(error, results);
+    });
+  });
+}

@@ -128,4 +128,22 @@ router.get('/users/:course_id', function (req, res, next) {
   });
 });
 
+//Read activities
+router.get('/activities/:course_id', function (req, res, next) {
+  var course_id = req.params.course_id;
+
+  Course.get_course_activities(course_id, function(error, results) {
+    console.log('error', error);
+    console.log('results', results);
+
+    if (error) {
+      return res.status(500).json({success: false, data: error});
+    }
+
+    if (results) {
+      return res.json(results);
+    }
+  });
+});
+
 module.exports = router;

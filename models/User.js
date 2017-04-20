@@ -281,42 +281,7 @@ module.exports.get_user_courses = function(user_id, cb) {
   });
 }
 
-module.exports.add_activity_to_user = function(data, cb) {
-  var results = null;
-  var error = null;
-
-  pg.connect(connectionString, (err, client, done) => {
-
-    if(err) {
-      done();
-      console.log(err);
-      error = err;
-      cb(error, results);
-    }
-
-    client.query('INSERT INTO users_activities(activity_id, user_id) values($1, $2);',
-    [data.activity_id, data.user_id], function(err, result) {
-      if(err) {
-        done();
-        console.log(err);
-        cb(error, results);
-      } else {
-        var query = client.query('SELECT * FROM users_activities WHERE activity_id=($1);', [data.activity_id]);
-
-        query.on('row', (row) => {
-          results = row;
-        });
-
-        query.on('end', () => {
-          done();
-          cb(error, results);
-        });
-      }
-    });
-  });
-}
-
-module.exports.get_user_activities = function(user_id, cb) {
+module.exports.get_user_submissions = function(user_id, cb) {
   var results = [];
   var error = null;
 
@@ -329,7 +294,7 @@ module.exports.get_user_activities = function(user_id, cb) {
       cb(error, results);
     }
 
-    var query = client.query('SELECT * FROM users_activities WHERE user_id=($1);', [user_id]);
+    var query = client.query('SELECT * FROM submissions WHERE user_id=($1) AND deleted=FALSE;', [user_id]);
     
     query.on('row', (row) => {
       results.push(row);
@@ -341,3 +306,4 @@ module.exports.get_user_activities = function(user_id, cb) {
     });
   });
 }
+
