@@ -34,7 +34,7 @@ var get_project_id = function(token, cb) {
     },
     headers: {
       'User-Agent': 'LIME',
-      'PRIVATE-TOKEN': 'fBXUsU41TjB4A5VHz2ze'
+      'Authorization': auth
     }
   }
 
