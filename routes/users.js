@@ -35,10 +35,10 @@ router.post('/', function (req, res, next) {
 //Read Users
 router.get('/current', function (req, res, next) {
   if (req.session.passport == undefined || req.session.passport.user.id == undefined) {
-    return res.json({
-      user_id: '1215701',
-      role: 'scholar'
-    });
+    // return res.json({
+    //   user_id: '1215701',
+    //   role: 'scholar'
+    // });
     // return res.json({
     //   user_id: '1128287',
     //   role: 'admin'
@@ -178,6 +178,24 @@ router.get('/courses/:user_id', function (req, res, next) {
   var user_id = req.params.user_id;
 
   User.get_user_courses(user_id, function(error, results) {
+    console.log('error', error);
+    console.log('results', results);
+
+    if (error) {
+      return res.status(500).json({success: false, data: error});
+    }
+
+    if (results) {
+      return res.json(results);
+    }
+  });
+});
+
+//Read submissions
+router.get('/submissions/:user_id', function (req, res, next) {
+  var user_id = req.params.user_id;
+
+  User.get_user_submissions(user_id, function(error, results) {
     console.log('error', error);
     console.log('results', results);
 

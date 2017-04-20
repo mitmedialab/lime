@@ -183,9 +183,20 @@ module.exports.soft_delete_user = function(id, cb) {
         var query = client.query('UPDATE users_courses SET deleted=($1) WHERE user_id=($2);', [true, id]);
         
         query.on('end', () => {
-          done();
-          results = {id: id};
-          cb(error, results);
+          var second_query = client.query('UPDATE activities SET deleted=($1) WHERE expert_id=($2);', [true, id]);   
+          second_query.on('end', () => {
+            var third_query = client.query('UPDATE announcements SET deleted=($1) WHERE user_id=($2);', [true, id]);
+
+            third_query.on('end', () => {
+              var fourth_query = client.query('UPDATE submissions SET deleted=($1) WHERE user_id=($2);', [true, id]);
+
+              fourth_query.on('end', () => {
+                done();
+                results = {id: id};
+                cb(error, results);
+              });
+            });
+          });
         });
       }
     });

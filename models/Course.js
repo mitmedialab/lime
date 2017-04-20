@@ -171,9 +171,12 @@ module.exports.soft_delete_course = function(id, cb) {
         var query = client.query('UPDATE users_courses SET deleted=($1) WHERE course_id=($2);', [true, id]);
         
         query.on('end', () => {
-          done();
-          results = {id: id};
-          cb(error, results);
+          var second_query = client.query('UPDATE activities SET deleted=($1) WHERE course_id=($2);', [true, id]);   
+          second_query.on('end', () => {
+            done();
+            results = {id: id};
+            cb(error, results);
+          });
         });
       }
     });
