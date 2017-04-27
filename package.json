@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
-    "deploy": "node ./bin/www -t [ envify --NODE_ENV production ]",
+    "deploy": "npm run build && npm run server",
     "server": "node ./bin/www",
-    "supervisor": "supervisor ./bin/www",
     "client": "cd lemon && npm start",
-    "build": "cd lemon && npm run build"
+    "build": "cd lemon && npm run build",
+    "seed-2": "sed -i.bak s:static:build/static:g index.html",
+    "seed": "sed -i.bak s:username:$USERNAME:g config/db_dump && psql -U $USERNAME lime < config/db_dump"
   },
   "dependencies": {
     "axios": "^0.15.3",

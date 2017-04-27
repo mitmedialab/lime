@@ -1,0 +1,613 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.4.10
+-- Dumped by pg_dump version 9.6.1
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: activities; Type: TABLE; Schema: public; Owner: username
+--
+
+CREATE TABLE activities (
+    id integer NOT NULL,
+    title text NOT NULL,
+    description text,
+    image text,
+    chat_link text,
+    "timestamp" text,
+    course_id integer,
+    expert_id integer,
+    deleted boolean DEFAULT false
+);
+
+
+ALTER TABLE activities OWNER TO username;
+
+--
+-- Name: activities_id_seq; Type: SEQUENCE; Schema: public; Owner: username
+--
+
+CREATE SEQUENCE activities_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE activities_id_seq OWNER TO username;
+
+--
+-- Name: activities_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: username
+--
+
+ALTER SEQUENCE activities_id_seq OWNED BY activities.id;
+
+
+--
+-- Name: announcements; Type: TABLE; Schema: public; Owner: username
+--
+
+CREATE TABLE announcements (
+    id integer NOT NULL,
+    header text NOT NULL,
+    message text NOT NULL,
+    "timestamp" text NOT NULL,
+    user_id integer NOT NULL,
+    deleted boolean DEFAULT false
+);
+
+
+ALTER TABLE announcements OWNER TO username;
+
+--
+-- Name: announcements_id_seq; Type: SEQUENCE; Schema: public; Owner: username
+--
+
+CREATE SEQUENCE announcements_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE announcements_id_seq OWNER TO username;
+
+--
+-- Name: announcements_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: username
+--
+
+ALTER SEQUENCE announcements_id_seq OWNED BY announcements.id;
+
+
+--
+-- Name: courses; Type: TABLE; Schema: public; Owner: username
+--
+
+CREATE TABLE courses (
+    id integer NOT NULL,
+    title text NOT NULL,
+    source text NOT NULL,
+    description text NOT NULL,
+    image text NOT NULL,
+    course_link text NOT NULL,
+    chat_link text NOT NULL,
+    deleted boolean DEFAULT false
+);
+
+
+ALTER TABLE courses OWNER TO username;
+
+--
+-- Name: courses_id_seq; Type: SEQUENCE; Schema: public; Owner: username
+--
+
+CREATE SEQUENCE courses_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE courses_id_seq OWNER TO username;
+
+--
+-- Name: courses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: username
+--
+
+ALTER SEQUENCE courses_id_seq OWNED BY courses.id;
+
+
+--
+-- Name: objectives; Type: TABLE; Schema: public; Owner: username
+--
+
+CREATE TABLE objectives (
+    id integer NOT NULL,
+    description text NOT NULL,
+    activity_id integer NOT NULL,
+    deleted boolean DEFAULT false
+);
+
+
+ALTER TABLE objectives OWNER TO username;
+
+--
+-- Name: objectives_id_seq; Type: SEQUENCE; Schema: public; Owner: username
+--
+
+CREATE SEQUENCE objectives_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE objectives_id_seq OWNER TO username;
+
+--
+-- Name: objectives_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: username
+--
+
+ALTER SEQUENCE objectives_id_seq OWNED BY objectives.id;
+
+
+--
+-- Name: requirements; Type: TABLE; Schema: public; Owner: username
+--
+
+CREATE TABLE requirements (
+    id integer NOT NULL,
+    description text NOT NULL,
+    activity_id integer NOT NULL,
+    deleted boolean DEFAULT false
+);
+
+
+ALTER TABLE requirements OWNER TO username;
+
+--
+-- Name: requirements_id_seq; Type: SEQUENCE; Schema: public; Owner: username
+--
+
+CREATE SEQUENCE requirements_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE requirements_id_seq OWNER TO username;
+
+--
+-- Name: requirements_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: username
+--
+
+ALTER SEQUENCE requirements_id_seq OWNED BY requirements.id;
+
+
+--
+-- Name: submissions; Type: TABLE; Schema: public; Owner: username
+--
+
+CREATE TABLE submissions (
+    id integer NOT NULL,
+    title text,
+    description text,
+    gitlab_link text,
+    gdoc_link text,
+    image text,
+    "timestamp" text,
+    user_id integer NOT NULL,
+    activity_id integer NOT NULL,
+    deleted boolean DEFAULT false
+);
+
+
+ALTER TABLE submissions OWNER TO username;
+
+--
+-- Name: submissions_id_seq; Type: SEQUENCE; Schema: public; Owner: username
+--
+
+CREATE SEQUENCE submissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE submissions_id_seq OWNER TO username;
+
+--
+-- Name: submissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: username
+--
+
+ALTER SEQUENCE submissions_id_seq OWNED BY submissions.id;
+
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: username
+--
+
+CREATE TABLE users (
+    id numeric NOT NULL,
+    gitlab_access_token text NOT NULL,
+    github_access_token text,
+    gitter_access_token text,
+    name text NOT NULL,
+    affiliation text,
+    about text,
+    role text NOT NULL,
+    image text NOT NULL,
+    portfolio text,
+    chat_link text,
+    deleted boolean DEFAULT false
+);
+
+
+ALTER TABLE users OWNER TO username;
+
+--
+-- Name: users_courses; Type: TABLE; Schema: public; Owner: username
+--
+
+CREATE TABLE users_courses (
+    course_id integer NOT NULL,
+    user_id integer NOT NULL,
+    deleted boolean DEFAULT false
+);
+
+
+ALTER TABLE users_courses OWNER TO username;
+
+--
+-- Name: activities id; Type: DEFAULT; Schema: public; Owner: username
+--
+
+ALTER TABLE ONLY activities ALTER COLUMN id SET DEFAULT nextval('activities_id_seq'::regclass);
+
+
+--
+-- Name: announcements id; Type: DEFAULT; Schema: public; Owner: username
+--
+
+ALTER TABLE ONLY announcements ALTER COLUMN id SET DEFAULT nextval('announcements_id_seq'::regclass);
+
+
+--
+-- Name: courses id; Type: DEFAULT; Schema: public; Owner: username
+--
+
+ALTER TABLE ONLY courses ALTER COLUMN id SET DEFAULT nextval('courses_id_seq'::regclass);
+
+
+--
+-- Name: objectives id; Type: DEFAULT; Schema: public; Owner: username
+--
+
+ALTER TABLE ONLY objectives ALTER COLUMN id SET DEFAULT nextval('objectives_id_seq'::regclass);
+
+
+--
+-- Name: requirements id; Type: DEFAULT; Schema: public; Owner: username
+--
+
+ALTER TABLE ONLY requirements ALTER COLUMN id SET DEFAULT nextval('requirements_id_seq'::regclass);
+
+
+--
+-- Name: submissions id; Type: DEFAULT; Schema: public; Owner: username
+--
+
+ALTER TABLE ONLY submissions ALTER COLUMN id SET DEFAULT nextval('submissions_id_seq'::regclass);
+
+
+--
+-- Data for Name: activities; Type: TABLE DATA; Schema: public; Owner: username
+--
+
+COPY activities (id, title, description, image, chat_link, "timestamp", course_id, expert_id, deleted) FROM stdin;
+1   Recipe Page The food you eat reveals a lot about your roots and personal identity. Pick a significant dish that reminds you of home and create an app that features information about it you would like to share (ex: cultural significance, history/region of origin, recipe and preparation, etc).    http://img.clipartall.com/free-recipe-sheet-clip-art-recipe-clip-art-800_683.png    https://gitter.im/ML-LIME/Android-Beginners Monday, April 10, 2017 3:11 PM  6   1128287 f
+\.
+
+
+--
+-- Name: activities_id_seq; Type: SEQUENCE SET; Schema: public; Owner: username
+--
+
+SELECT pg_catalog.setval('activities_id_seq', 1, true);
+
+
+--
+-- Data for Name: announcements; Type: TABLE DATA; Schema: public; Owner: username
+--
+
+COPY announcements (id, header, message, "timestamp", user_id, deleted) FROM stdin;
+1   Welcome to LIME On Behalf of the Media Lab Learning Initiative, we would like to welcome you to LIME: Learning Innovators - Middle East. Welcome to our community of scholars and innovators. </br></br> LIME is a platform where you can take online courses relating to learning, innovation, and technology. Check out the courses tab to see the courses we offer. </br></br> More importanlty, LIME is a community where you can collaborate with other scholars on projects. Check out the community tab and direct message other scholars on Gitter. Monday, April 10, 2017 2:37 PM  1128287 f
+\.
+
+
+--
+-- Name: announcements_id_seq; Type: SEQUENCE SET; Schema: public; Owner: username
+--
+
+SELECT pg_catalog.setval('announcements_id_seq', 1, true);
+
+
+--
+-- Data for Name: courses; Type: TABLE DATA; Schema: public; Owner: username
+--
+
+COPY courses (id, title, source, description, image, course_link, chat_link, deleted) FROM stdin;
+1   Swift: Building iOS Apps    Flatiron School We’ll start with the fundamentals of Swift and move on to more advanced topics like Higher Order Functions, Protocols, and Extensions. Write, run, and view your code in Xcode and learn how to read warning and error messages. Use Interface Builder and Auto Layout to build interactive, visually stunning applications.    https://flatironschool.imgix.net/online-swift/build-ios-applications-v2.jpg?fit=crop&crop=entropy   https://flatironschool.com/programs/online-swift-free-course/   https://gitter.im/ML-LIME/Swift f
+2   Free Code Camp  freecodecamp.com    Free Code Camp is an open source community where you learn to code full stack JavaScript and help nonprofits through self-paced coding challenges.  https://qph.ec.quoracdn.net/main-qimg-403f76f93a17b887ddf92cb372136b64  https://www.freecodecamp.com/map    https://gitter.im/ML-LIME/FCC   f
+3   Intro to JavaScript Flatiron School You’ll build a Konami code program and a working game in JavaScript (and we promise it’s not yet-another-Blackjack clone!). You’ll also master the latest JavaScript syntax and techniques, an essential base for launching into further learning.  https://flatironschool.imgix.net/online-intro-to-javascript-free/course-graphics-expand-your-skills.jpg?fit=crop&crop=entropy   https://flatironschool.com/programs/online-intro-javascript-free-course/    https://gitter.im/ML-LIME/JavaScript    f
+4   How to Create Anything in Android   Udacity Here is one important question Android developers ask while making apps: 'How can I do ________ in Android?' The following are versions of this question that we came across recently: How can I add radio buttons to my app? How can I play a sound? How can I navigate between multiple screens? This course is a collection of such questions and their answers. </br></br>By the end of this course you will have mastered the ability to implement new Android features by reading a blog or article — this is a critical skill possessed by professional Android developers. As a result, you will also be able to use several User Interface components — like Toggle Buttons, Menus, Grid View and many more — that are central to making functional and delightful Android apps.   data:image/png;base64,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  https://www.udacity.com/course/how-to-create-anything-in-android--ud802 https://gitter.im/ML-LIME/Android   f
+5   UX Design for Mobile Developers Udacity This course is optimized for the developer who is looking to efficiently learn the most important design techniques that will help them make better apps (with a focus on mobile/Android). This is a UX design course built for current (and aspiring) mobile developers. </br></br>In this short course, you'll step back from your IDE and dive into the techniques that great designers use to plan and prototype amazing apps before any code is written.   https://d125fmws0bore1.cloudfront.net/assets/udacity_apple_icon-b2fe0e8bc834963f1cf490fdc55bc3170b37f05374e1e4b383af1d755d1893db.png    https://www.udacity.com/course/ux-design-for-mobile-developers--ud849   https://gitter.im/ML-LIME/UX-Design f
+6   Android Development for Beginners   Udacity Learn the basics of Android and Java programming, and take the first step on your journey to becoming an Android developer! </br></br>This course is designed for students who are new to programming, and want to learn how to build Android apps. You don’t need any programming experience to take this course. If you’ve been using a smartphone to surf the web and chat with friends, then you’re our perfect target student! data:image/png;base64,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  https://www.udacity.com/course/android-development-for-beginners--ud837 https://gitter.im/ML-LIME/Android-Beginners f
+\.
+
+
+--
+-- Name: courses_id_seq; Type: SEQUENCE SET; Schema: public; Owner: username
+--
+
+SELECT pg_catalog.setval('courses_id_seq', 6, true);
+
+
+--
+-- Data for Name: objectives; Type: TABLE DATA; Schema: public; Owner: username
+--
+
+COPY objectives (id, description, activity_id, deleted) FROM stdin;
+1   Learn to navigate Android Studio    1   f
+2   Learn about TextView and ImageView  1   f
+\.
+
+
+--
+-- Name: objectives_id_seq; Type: SEQUENCE SET; Schema: public; Owner: username
+--
+
+SELECT pg_catalog.setval('objectives_id_seq', 2, true);
+
+
+--
+-- Data for Name: requirements; Type: TABLE DATA; Schema: public; Owner: username
+--
+
+COPY requirements (id, description, activity_id, deleted) FROM stdin;
+1   The final design must have a text element.  1   f
+2   Your design must include at least two different font sizes and two different font types.    1   f
+3   Personalize your recipe app with four or more colors.   1   f
+\.
+
+
+--
+-- Name: requirements_id_seq; Type: SEQUENCE SET; Schema: public; Owner: username
+--
+
+SELECT pg_catalog.setval('requirements_id_seq', 3, true);
+
+
+--
+-- Data for Name: submissions; Type: TABLE DATA; Schema: public; Owner: username
+--
+
+COPY submissions (id, title, description, gitlab_link, gdoc_link, image, "timestamp", user_id, activity_id, deleted) FROM stdin;
+2   Noor's Submission   If you like the idea I was planning to do the activity timed to see how long it takes.</br></br>I would end up doing something like the picture above (except with different text)! It would be a simple way to demonstrate mastery of text, colors, fonts, and pictures.</br></br>If the recipe theme doesn’t fit with our program, the rubric should work with almost any simple app the student wants to make!   https://gitlab.com/ https://docs.google.com/document/d/1UTXaqam_q_SjPmQ9QuOsp0M5rhHGKJtGwUpptPx7Wrk/edit    http://img.clipartall.com/free-recipe-sheet-clip-art-recipe-clip-art-800_683.png    Friday, April 14, 2017 3:15 PM  1128287 1   f
+\.
+
+
+--
+-- Name: submissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: username
+--
+
+SELECT pg_catalog.setval('submissions_id_seq', 2, true);
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: username
+--
+
+COPY users (id, gitlab_access_token, github_access_token, gitter_access_token, name, affiliation, about, role, image, portfolio, chat_link, deleted) FROM stdin;
+1128287 d7365c7d12e0a069969059286c3cfb3d9653a9b9e778da46746b9f1d4464b196    \N  12df54fe34d763093dac4558941f8c0852cece11    Noor Eddin Amer MIT Media Lab   Noor is a graduate student and research assistant with the Learning Initiative at the MIT Media Lab, pursuing a degree in Computer Engineering. Noor grew up in Jordan and travels frequently to the region.    admin   https://gitlab.com/uploads/user/avatar/1128287/avatar.png   https://nooralasa.gitlab.io/lime-portfolio  https://gitter.im/nooralasa f
+1215701 27e1465bae141d3c91de9d8813664590c1652265226cb5c9f6e0ff571aa8fb4d    \N  5a16cf4b92329fa398c344b07c68d07fda66ffe4    Ben Bitdiddle   MIT Ben Bitdiddle is a fictional character created by Steve Ward. Ben was used in problem sets for MIT's 6.031, in the 1970s. He has since appeared in a large number of other locations, including other classes at MIT and other institutions.    scholar https://secure.gravatar.com/avatar/eec1be0d974239bf6bc7e2fe7f69a5ba?s=80&d=identicon    https://benbitdiddle12.gitlab.io/lime-portfolio https://gitter.im/benbitdiddle12    f
+\.
+
+
+--
+-- Data for Name: users_courses; Type: TABLE DATA; Schema: public; Owner: username
+--
+
+COPY users_courses (course_id, user_id, deleted) FROM stdin;
+1   1215701 f
+\.
+
+
+--
+-- Name: activities activities_pkey; Type: CONSTRAINT; Schema: public; Owner: username
+--
+
+ALTER TABLE ONLY activities
+    ADD CONSTRAINT activities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: announcements announcements_pkey; Type: CONSTRAINT; Schema: public; Owner: username
+--
+
+ALTER TABLE ONLY announcements
+    ADD CONSTRAINT announcements_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: courses courses_pkey; Type: CONSTRAINT; Schema: public; Owner: username
+--
+
+ALTER TABLE ONLY courses
+    ADD CONSTRAINT courses_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: objectives objectives_pkey; Type: CONSTRAINT; Schema: public; Owner: username
+--
+
+ALTER TABLE ONLY objectives
+    ADD CONSTRAINT objectives_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: requirements requirements_pkey; Type: CONSTRAINT; Schema: public; Owner: username
+--
+
+ALTER TABLE ONLY requirements
+    ADD CONSTRAINT requirements_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: submissions submissions_pkey; Type: CONSTRAINT; Schema: public; Owner: username
+--
+
+ALTER TABLE ONLY submissions
+    ADD CONSTRAINT submissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users_courses users_courses_pkey; Type: CONSTRAINT; Schema: public; Owner: username
+--
+
+ALTER TABLE ONLY users_courses
+    ADD CONSTRAINT users_courses_pkey PRIMARY KEY (course_id, user_id);
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: username
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: activities activities_course_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: username
+--
+
+ALTER TABLE ONLY activities
+    ADD CONSTRAINT activities_course_id_fkey FOREIGN KEY (course_id) REFERENCES courses(id);
+
+
+--
+-- Name: activities activities_expert_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: username
+--
+
+ALTER TABLE ONLY activities
+    ADD CONSTRAINT activities_expert_id_fkey FOREIGN KEY (expert_id) REFERENCES users(id);
+
+
+--
+-- Name: announcements announcements_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: username
+--
+
+ALTER TABLE ONLY announcements
+    ADD CONSTRAINT announcements_user_id_fkey FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
+
+
+--
+-- Name: objectives objectives_activity_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: username
+--
+
+ALTER TABLE ONLY objectives
+    ADD CONSTRAINT objectives_activity_id_fkey FOREIGN KEY (activity_id) REFERENCES activities(id) ON DELETE CASCADE;
+
+
+--
+-- Name: requirements requirements_activity_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: username
+--
+
+ALTER TABLE ONLY requirements
+    ADD CONSTRAINT requirements_activity_id_fkey FOREIGN KEY (activity_id) REFERENCES activities(id) ON DELETE CASCADE;
+
+
+--
+-- Name: submissions submissions_activity_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: username
+--
+
+ALTER TABLE ONLY submissions
+    ADD CONSTRAINT submissions_activity_id_fkey FOREIGN KEY (activity_id) REFERENCES activities(id) ON DELETE CASCADE;
+
+
+--
+-- Name: submissions submissions_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: username
+--
+
+ALTER TABLE ONLY submissions
+    ADD CONSTRAINT submissions_user_id_fkey FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
+
+
+--
+-- Name: users_courses users_courses_course_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: username
+--
+
+ALTER TABLE ONLY users_courses
+    ADD CONSTRAINT users_courses_course_id_fkey FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE;
+
+
+--
+-- Name: users_courses users_courses_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: username
+--
+
+ALTER TABLE ONLY users_courses
+    ADD CONSTRAINT users_courses_user_id_fkey FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
+
+
+--
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
