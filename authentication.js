@@ -5,12 +5,12 @@ var OAuth2Strategy  = require('passport-oauth2');
 var GitlabStrategy  = require('passport-gitlab2');
 
 var User = require('./models/User');
-var Github_API = require('./models/Github_API');
+// var Github_API = require('./models/Github_API');
 var Gitlab_API = require('./models/Gitlab_API');
 var Gitter_API = require('./models/Gitter_API');
 
-var githubClientId = require('./config/index').githubClientId;
-var githubClientSecret = require('./config/index').githubClientSecret;
+// var githubClientId = require('./config/index').githubClientId;
+// var githubClientSecret = require('./config/index').githubClientSecret;
 var gitlabClientId = require('./config/index').gitlabClientId;
 var gitlabClientSecret = require('./config/index').gitlabClientSecret;
 var homepageUri = require('./config/index').homepageUri;
@@ -63,53 +63,53 @@ module.exports = function (app) {
       });
   }));
 
-  passport.use(
-    new Strategy({
-      clientID: githubClientId,
-      clientSecret: githubClientSecret,
-      callbackURL: homepageUri+'/auth/github/callback'
-    },function(accessToken, refreshToken, profile, cb) {
-      var data = {
-        github_access_token: accessToken,
-        gitter_access_token: null,
-        id: profile._json.id,
-        name: profile._json.name,
-        affiliation: profile._json.company,
-        about: profile._json.bio,
-        role: 'scholar',
-        image: profile._json.avatar_url,
-        portfolio: 'https://'+profile._json.login+'.github.io/lime-portfolio',
-        chat_link: 'https://gitter.im/'+profile._json.login
-      }
+  // passport.use(
+  //   new Strategy({
+  //     clientID: githubClientId,
+  //     clientSecret: githubClientSecret,
+  //     callbackURL: homepageUri+'/auth/github/callback'
+  //   },function(accessToken, refreshToken, profile, cb) {
+  //     var data = {
+  //       github_access_token: accessToken,
+  //       gitter_access_token: null,
+  //       id: profile._json.id,
+  //       name: profile._json.name,
+  //       affiliation: profile._json.company,
+  //       about: profile._json.bio,
+  //       role: 'scholar',
+  //       image: profile._json.avatar_url,
+  //       portfolio: 'https://'+profile._json.login+'.github.io/lime-portfolio',
+  //       chat_link: 'https://gitter.im/'+profile._json.login
+  //     }
 
-      User.get_user(data.id, function(error, results) {
+  //     User.get_user(data.id, function(error, results) {
 
-        if (error) {
-          return cb(error, null);
-        }
+  //       if (error) {
+  //         return cb(error, null);
+  //       }
 
-        if (results) {
-          return cb(null, profile);
-        } else {
-          User.create_user(data, function(err, result) {
-            if (err) {
-              return cb(err, null);
-            }
+  //       if (results) {
+  //         return cb(null, profile);
+  //       } else {
+  //         User.create_user(data, function(err, result) {
+  //           if (err) {
+  //             return cb(err, null);
+  //           }
 
-            if (result) {
-              Github_API.fork_portfolio(result.github_access_token, function(er, rest) {
-                if (er) {
-                  return cb(er, null);
-                }
-                if (rest) {
-                  return cb(null, profile);
-                }
-              }); 
-            }
-          });
-        }
-      });
-  }));
+  //           if (result) {
+  //             Github_API.fork_portfolio(result.github_access_token, function(er, rest) {
+  //               if (er) {
+  //                 return cb(er, null);
+  //               }
+  //               if (rest) {
+  //                 return cb(null, profile);
+  //               }
+  //             }); 
+  //           }
+  //         });
+  //       }
+  //     });
+  // }));
 
   passport.use(
     new OAuth2Strategy({
