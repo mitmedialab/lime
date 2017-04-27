@@ -57,7 +57,7 @@ var get_project_id = function(token, cb) {
   }); 
 }
 
-var update_portfolio = function(token, project_id, name, username, cb) {
+var update_portfolio = function(token, project_id, name, username, image_path, cb) {
   var content = "# Site settings\n\
 title: "+name+"\n\
 description: 'Full Snack Developer' \n\
@@ -72,6 +72,7 @@ author: \n\
   facebook_username: "+username+" \n\
   github_username:  "+username+" \n\
   linkedin_username:  "+username+" \n\
+  image_path: "+image_path+"\n\
 defaults:\n\
   -\n\
     scope:\n\
@@ -119,7 +120,7 @@ exclude: ['README.md', 'Gemfile', 'Gemfile.lock', 'screenshot.png']"
   }); 
 }
 
-module.exports.fork_and_setup_portfolio = function(token, name, username, cb) {
+module.exports.fork_and_setup_portfolio = function(token, name, username, image_path, cb) {
   get_project_id(token, function(e, proj_id) {
     if(e) {
       return cb(e, null);
@@ -140,7 +141,7 @@ module.exports.fork_and_setup_portfolio = function(token, name, username, cb) {
             }
 
             if (id) {
-              update_portfolio(token, id, name, username, function (er, res) {
+              update_portfolio(token, id, name, username, image_path, function (er, res) {
                 if (er) {
                   return cb(er, null);
                 }

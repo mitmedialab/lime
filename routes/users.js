@@ -37,25 +37,32 @@ router.get('/current', function (req, res, next) {
   if (req.session.passport == undefined || req.session.passport.user.id == undefined) {
     // return res.json({
     //   user_id: '1215701',
-    //   role: 'scholar'
+    //   role: 'scholar',
+    //   authenticated: true
     // });
     // return res.json({
     //   user_id: '1128287',
-    //   role: 'admin'
+    //   role: 'admin',
+    //   authenticated: true
     // });
     console.log('Error Not Authenticated');
-    return res.status(500).json({success: false, data: 'Not Authenticated'});
+    return res.json({
+      authenticated: false
+    });
   } else {
     console.log('Authenticated');
 
     User.get_user(req.session.passport.user.id, function(error, results) {
 
       if (error) {
-        return res.status(500).json({success: false, data: error});
+        return res.json({
+          authenticated: false
+        });
       }
 
       if (results) {
         return res.json({
+          authenticated: true,
           user_id: req.session.passport.user.id,
           role: results.role
         });

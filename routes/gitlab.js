@@ -17,7 +17,7 @@ router.get('/forkportfolio/:user_id', function(req, res, next) {
 			console.log('result ', result);
 			var username = result.portfolio;
 			username = username.substring(8, username.length - 25);
-			Gitlab_API.fork_and_setup_portfolio(result.gitlab_access_token, result.name, username, function(err, results) {
+			Gitlab_API.fork_and_setup_portfolio(result.gitlab_access_token, result.name, username, result.image, function(err, results) {
 				if (err) {
 					console.log('error');
 					return res.status(500).json({success: false, data: err});
