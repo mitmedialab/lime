@@ -1,7 +1,20 @@
+// -------------------------------------------------------------------------- //
+// The Courses Model                                                          //
+// The ORM for mapping SQL database querries into a JavaScript module methods //
+// -------------------------------------------------------------------------- //
+
+//import moment for getting timestamps
 var moment = require('moment');
+//import pg to connect to the database 
 var pg = require('pg');
+//import the connection string for connecting to the database
 var connectionString = require('../config/index').connectionString;
 
+/**
+ * creates a new course in the database
+ * @param data an object with course attributes
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.create_course = function(data, cb) {
   var results = null;
   var error = null;
@@ -38,6 +51,11 @@ module.exports.create_course = function(data, cb) {
   });
 }
 
+/**
+ * returns the course from the database if it exists and not deleted
+ * @param id the id of the course to be fetched
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.get_course = function(id, cb) {
   var results = null;
   var error = null;
@@ -64,6 +82,10 @@ module.exports.get_course = function(id, cb) {
   });
 }
 
+/**
+ * returns all courses from the database that are not deleted
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.get_courses = function(cb) {
   var results = [];
   var error = null;
@@ -90,6 +112,12 @@ module.exports.get_courses = function(cb) {
   });
 }
 
+/**
+ * updates a course in the database
+ * @param id the id of the course to be updated 
+ * @param data an object with the course attributes to be updated
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.update_course = function(id, data, cb) {
   var results = null;
   var error = null;
@@ -146,6 +174,11 @@ module.exports.update_course = function(id, data, cb) {
   });
 }
 
+/**
+ * soft delete the specified course by setting its deleted attribute to true 
+ * @param id the id of the course to be soft deleted 
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.soft_delete_course = function(id, cb) {
   var results = null;
   var error = null;
@@ -183,6 +216,11 @@ module.exports.soft_delete_course = function(id, cb) {
   });  
 }
 
+/**
+ * permenantly delete the specified course from the database
+ * @param id the id of the course to be deleted 
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.delete_course = function(id, cb) {
   var results = null;
   var error = null;
@@ -210,6 +248,11 @@ module.exports.delete_course = function(id, cb) {
   });
 }
 
+/**
+ * return all users associated with the specified course
+ * @param course_id the id of the relevant course 
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.get_course_users = function(course_id, cb) {
   var results = [];
   var error = null;
@@ -236,6 +279,11 @@ module.exports.get_course_users = function(course_id, cb) {
   });
 }
 
+/**
+ * return all activities associated with the specified course
+ * @param course_id the id of the relevant course 
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.get_course_activities = function(course_id, cb) {
   var results = [];
   var error = null;

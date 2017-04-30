@@ -1,6 +1,17 @@
+// ------------------------------------------------------ //
+// The Activities Router                                  //
+// The router handling all api cals to /api/v1/activities //
+// ------------------------------------------------------ //
+
+/** 
+ * Express Imports
+ * @import express the main express web framework
+ * @import router the express router to handle api calls
+ **/
 var express = require('express');
 var router = express.Router();
 
+//Activities ORM for changing activities data
 var Activity = require('../models/Activity');
 
 //Create activity
@@ -135,24 +146,6 @@ router.get('/requirements/:activity_id', function (req, res, next) {
   });
 });
 
-// //Read requirement
-// router.get('/requirements/:requirement_id', function (req, res, next) {
-//   var id = req.params.requirement_id;
-
-//   Activity.get_requirement(id, function(error, results) {
-//     console.log('error', error);
-//     console.log('results', results);
-
-//     if (error) {
-//       return res.status(500).json({success: false, data: error});
-//     }
-
-//     if (results) {
-//       return res.json(results);
-//     }
-//   });
-// });
-
 //Read requirements
 router.get('/requirements/', function (req, res, next) {
   console.log('Im getting requirements');
@@ -248,24 +241,6 @@ router.get('/objectives/:activity_id', function (req, res, next) {
     }
   });
 });
-
-// //Read objective
-// router.get('/objectives/:objective_id', function (req, res, next) {
-//   var id = req.params.objective_id;
-
-//   Activity.get_objective(id, function(error, results) {
-//     console.log('error', error);
-//     console.log('results', results);
-
-//     if (error) {
-//       return res.status(500).json({success: false, data: error});
-//     }
-
-//     if (results) {
-//       return res.json(results);
-//     }
-//   });
-// });
 
 //Read objectives
 router.get('/objectives/', function (req, res, next) {
@@ -366,24 +341,6 @@ router.get('/submissions/:activity_id', function (req, res, next) {
     }
   });
 });
-
-// //Read submission
-// router.get('/submissions/:submission_id', function (req, res, next) {
-//   var id = req.params.submission_id;
-
-//   Activity.get_submission(id, function(error, results) {
-//     console.log('error', error);
-//     console.log('results', results);
-
-//     if (error) {
-//       return res.status(500).json({success: false, data: error});
-//     }
-
-//     if (results) {
-//       return res.json(results);
-//     }
-//   });
-// });
 
 //Read submissions
 router.get('/submissions/', function (req, res, next) {

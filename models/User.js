@@ -1,7 +1,20 @@
+// -------------------------------------------------------------------------- //
+// The Users Model                                                            //
+// The ORM for mapping SQL database querries into a JavaScript module methods //
+// -------------------------------------------------------------------------- //
+
+//import moment for getting timestamps
 var moment = require('moment');
+//import pg to connect to the database 
 var pg = require('pg');
+//import the connection string for connecting to the database
 var connectionString = require('../config/index').connectionString;
 
+/**
+ * creates a new user in the database
+ * @param data an object with user attributes
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.create_user = function(data, cb) {
   var results = null;
   var error = null;
@@ -39,6 +52,11 @@ module.exports.create_user = function(data, cb) {
   });
 }
 
+/**
+ * returns the user from the database if it exists and not deleted
+ * @param id the id of the user to be fetched
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.get_user = function(id, cb) {
   var results = null;
   var error = null;
@@ -65,6 +83,10 @@ module.exports.get_user = function(id, cb) {
   });
 }
 
+/**
+ * returns all users from the database that are not deleted
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.get_users = function(cb) {
   var results = [];
   var error = null;
@@ -91,6 +113,12 @@ module.exports.get_users = function(cb) {
   });
 }
 
+/**
+ * updates a user in the database
+ * @param id the id of the user to be updated 
+ * @param data an object with the user attributes to be updated
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.update_user = function(id, data, cb) {
   var results = null;
   var error = null;
@@ -159,6 +187,11 @@ module.exports.update_user = function(id, data, cb) {
   });
 }
 
+/**
+ * soft delete the specified user by setting its deleted attribute to true 
+ * @param id the id of the user to be soft deleted 
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.soft_delete_user = function(id, cb) {
   var results = null;
   var error = null;
@@ -203,6 +236,11 @@ module.exports.soft_delete_user = function(id, cb) {
   });  
 }
 
+/**
+ * permenantly delete the specified user from the database
+ * @param id the id of the user to be deleted 
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.delete_user = function(id, cb) {
   var results = null;
   var error = null;
@@ -231,6 +269,11 @@ module.exports.delete_user = function(id, cb) {
   });
 }
 
+/**
+ * associate the specified course with the specified user
+ * @param data an object including the course and user ids
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.add_course_to_user = function(data, cb) {
   var results = null;
   var error = null;
@@ -266,6 +309,11 @@ module.exports.add_course_to_user = function(data, cb) {
   });
 }
 
+/**
+ * return all courses associated with the specified user
+ * @param user_id the id of the relevant user 
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.get_user_courses = function(user_id, cb) {
   var results = [];
   var error = null;
@@ -292,6 +340,11 @@ module.exports.get_user_courses = function(user_id, cb) {
   });
 }
 
+/**
+ * return all submissions associated with the specified user
+ * @param user_id the id of the relevant user 
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.get_user_submissions = function(user_id, cb) {
   var results = [];
   var error = null;

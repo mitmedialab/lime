@@ -1,6 +1,17 @@
+// --------------------------------------------------- //
+// The Courses Router                                  //
+// The router handling all api cals to /api/v1/courses //
+// --------------------------------------------------- //
+
+/** 
+ * Express Imports
+ * @import express the main express web framework
+ * @import router the express router to handle api calls
+ **/
 var express = require('express');
 var router = express.Router();
 
+//Courses ORM for manipulating courses data
 var Course = require('../models/Course');
 
 
@@ -92,7 +103,6 @@ router.put('/:course_id', function (req, res, next) {
 });
 
 //Delete Course
-//TODO: Need to also delete all relationships associated with it
 router.delete('/:course_id', function (req, res, next) {
   var id = req.params.course_id;
   
@@ -110,7 +120,7 @@ router.delete('/:course_id', function (req, res, next) {
   });
 });
 
-//Read users
+//Read Course Users
 router.get('/users/:course_id', function (req, res, next) {
   var course_id = req.params.course_id;
 
@@ -128,7 +138,7 @@ router.get('/users/:course_id', function (req, res, next) {
   });
 });
 
-//Read activities
+//Read Course Activities
 router.get('/activities/:course_id', function (req, res, next) {
   var course_id = req.params.course_id;
 

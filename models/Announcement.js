@@ -1,7 +1,20 @@
+// -------------------------------------------------------------------------- //
+// The Announcements Model                                                    //
+// The ORM for mapping SQL database querries into a JavaScript module methods //
+// -------------------------------------------------------------------------- //
+
+//import moment for getting timestamps
 var moment = require('moment');
+//import pg to connect to the database 
 var pg = require('pg');
+//import the connection string for connecting to the database
 var connectionString = require('../config/index').connectionString;
 
+/**
+ * creates a new announcement in the database
+ * @param data an object with announcement attributes
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.create_announcement = function(data, cb) {
   var results = null;
   var error = null;
@@ -42,6 +55,11 @@ module.exports.create_announcement = function(data, cb) {
   });  
 }
 
+/**
+ * returns the announcement from the database if it exists and not deleted
+ * @param id the id of the announcement to be fetched
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.get_announcement = function(id, cb) {
   var results = null;
   var error = null; 
@@ -68,6 +86,10 @@ module.exports.get_announcement = function(id, cb) {
   }); 
 }
 
+/**
+ * returns all announcements from the database that are not deleted
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.get_announcements = function(cb) {
   var results = [];
   var error = null;  
@@ -94,6 +116,12 @@ module.exports.get_announcements = function(cb) {
   });
 }
 
+/**
+ * updates an announcement in the database
+ * @param id the id of the announcement to be updated 
+ * @param data an object with the announcement attributes to be updated
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.update_announcement = function(id, data, cb) {
   var results = null;
   var error = null;
@@ -139,6 +167,11 @@ module.exports.update_announcement = function(id, data, cb) {
   });  
 }
 
+/**
+ * soft delete the specified announcement by setting its deleted attribute to true 
+ * @param id the id of the announcement to be soft deleted 
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.soft_delete_announcement = function(id, cb) {
   var results = null;
   var error = null;
@@ -168,6 +201,11 @@ module.exports.soft_delete_announcement = function(id, cb) {
   });  
 }
 
+/**
+ * permenantly delete the specified announcement from the database
+ * @param id the id of the announcement to be deleted 
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.delete_announcement = function(id, cb) {
   var results = null;
   var error = null;  

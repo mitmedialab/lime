@@ -1,7 +1,20 @@
+// -------------------------------------------------------------------------- //
+// The Activity Model                                                         //
+// The ORM for mapping SQL database querries into a JavaScript module methods //
+// -------------------------------------------------------------------------- //
+
+//import moment for getting timestamps
 var moment = require('moment');
+//import pg to connect to the database 
 var pg = require('pg');
+//import the connection string for connecting to the database
 var connectionString = require('../config/index').connectionString;
 
+/**
+ * creates a new activity in the database and adds its requirements and objectives
+ * @param data an object with activity attributes
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.create_activity = function(data, cb) {
   var results = null;
   var error = null;
@@ -50,6 +63,11 @@ module.exports.create_activity = function(data, cb) {
   });
 }
 
+/**
+ * returns the activity from the database if it exists and not deleted
+ * @param id the id of the activity to be fetched
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.get_activity = function(id, cb) {
   var results = null;
   var error = null;
@@ -76,6 +94,10 @@ module.exports.get_activity = function(id, cb) {
   });
 }
 
+/**
+ * returns all activities from the database that are not deleted
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.get_activities = function(cb) {
   var results = [];
   var error = null;
@@ -102,6 +124,12 @@ module.exports.get_activities = function(cb) {
   });
 }
 
+/**
+ * updates an activity in the database and adds its requirements and objectives
+ * @param id the id of the activity to be updated 
+ * @param data an object with the activity attributes to be updated
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.update_activity = function(id, data, cb) {
   var results = null;
   var error = null;
@@ -177,6 +205,11 @@ module.exports.update_activity = function(id, data, cb) {
   });
 }
 
+/**
+ * soft delete the specified activity by setting its deleted attribute to true 
+ * @param id the id of the activity to be soft deleted 
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.soft_delete_activity = function(id, cb) {
   var results = null;
   var error = null;
@@ -217,6 +250,11 @@ module.exports.soft_delete_activity = function(id, cb) {
   });  
 }
 
+/**
+ * permenantly delete the specified activity from the database
+ * @param id the id of the activity to be deleted 
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.delete_activity = function(id, cb) {
   var results = null;
   var error = null;
@@ -244,6 +282,11 @@ module.exports.delete_activity = function(id, cb) {
   });
 }
 
+/**
+ * creates a new requirement associdated with the specified activity
+ * @param data an object with requirement attributes
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.add_activity_requirement = function(data, cb) {
   var results = null;
   var error = null;
@@ -279,6 +322,11 @@ module.exports.add_activity_requirement = function(data, cb) {
   });
 }
 
+/**
+ * soft deletes all requirements associated with the specified activity
+ * @param id the id of the activity whose requirements are to be soft deleted
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.soft_delete_activity_requirements = function(id, cb) {
   var results = null;
   var error = null;
@@ -307,6 +355,11 @@ module.exports.soft_delete_activity_requirements = function(id, cb) {
   });  
 }
 
+/**
+ * returns all requirements belonging to the specified activity from the database
+ * @param activity_id the id of the activity whose requirements are to be fetched
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.get_activity_requirements = function(activity_id, cb) {
   var results = [];
   var error = null;
@@ -333,6 +386,11 @@ module.exports.get_activity_requirements = function(activity_id, cb) {
   });
 }
 
+/**
+ * returns the specified requirement from the database
+ * @param id the id of the requirement to be fetched
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.get_requirement = function(id, cb) {
   var results = null;
   var error = null;
@@ -359,6 +417,10 @@ module.exports.get_requirement = function(id, cb) {
   });
 }
 
+/**
+ * returns all requirements from the database
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.get_requirements = function(cb) {
   var results = [];
   var error = null;
@@ -389,6 +451,12 @@ module.exports.get_requirements = function(cb) {
   });
 }
 
+/**
+ * updates the specified requirement in the database
+ * @param id the id of the requirement to be updated
+ * @param data an object with the requirement attributes to be updated
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.update_requirement = function(id, data, cb) {
   var results = null;
   var error = null;
@@ -420,6 +488,11 @@ module.exports.update_requirement = function(id, data, cb) {
   });
 }
 
+/**
+ * soft delete the specified requirement by setting its deleted attribute to true 
+ * @param id the id of the requirement to be soft deleted 
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.soft_delete_requirement = function(id, cb) {
   var results = null;
   var error = null;
@@ -452,6 +525,11 @@ module.exports.soft_delete_requirement = function(id, cb) {
   });  
 }
 
+/**
+ * permenantly delete the specified requirement from the database 
+ * @param id the id of the requirement to be deleted 
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.delete_requirement = function(id, cb) {
   var results = null;
   var error = null;
@@ -479,6 +557,11 @@ module.exports.delete_requirement = function(id, cb) {
   });
 }
 
+/**
+ * creates a new objective associdated with the specified activity
+ * @param data an object with objective attributes
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.add_activity_objective = function(data, cb) {
   var results = null;
   var error = null;
@@ -514,6 +597,11 @@ module.exports.add_activity_objective = function(data, cb) {
   });
 }
 
+/**
+ * soft deletes all objectives associated with the specified activity
+ * @param id the id of the activity whose objectives are to be soft deleted
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.soft_delete_activity_objectives = function(id, cb) {
   var results = null;
   var error = null;
@@ -542,6 +630,11 @@ module.exports.soft_delete_activity_objectives = function(id, cb) {
   });  
 }
 
+/**
+ * returns all objectives belonging to the specified activity from the database
+ * @param activity_id the id of the activity whose objectives are to be fetched
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.get_activity_objectives = function(activity_id, cb) {
   var results = [];
   var error = null;
@@ -568,6 +661,11 @@ module.exports.get_activity_objectives = function(activity_id, cb) {
   });
 }
 
+/**
+ * returns the specified objective from the database
+ * @param id the id of the objective to be fetched
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.get_objective = function(id, cb) {
   var results = null;
   var error = null;
@@ -594,6 +692,10 @@ module.exports.get_objective = function(id, cb) {
   });
 }
 
+/**
+ * returns all objectives from the database
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.get_objectives = function(cb) {
   var results = [];
   var error = null;
@@ -620,6 +722,12 @@ module.exports.get_objectives = function(cb) {
   });
 }
 
+/**
+ * updates the specified objective in the database
+ * @param id the id of the objective to be updated
+ * @param data an object with the objective attributes to be updated
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.update_objective = function(id, data, cb) {
   var results = null;
   var error = null;
@@ -651,6 +759,11 @@ module.exports.update_objective = function(id, data, cb) {
   });
 }
 
+/**
+ * soft delete the specified objective by setting its deleted attribute to true 
+ * @param id the id of the objective to be soft deleted 
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.soft_delete_objective = function(id, cb) {
   var results = null;
   var error = null;
@@ -683,6 +796,11 @@ module.exports.soft_delete_objective = function(id, cb) {
   });  
 }
 
+/**
+ * permenantly delete the specified objective from the database 
+ * @param id the id of the objective to be deleted 
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.delete_objective = function(id, cb) {
   var results = null;
   var error = null;
@@ -710,6 +828,11 @@ module.exports.delete_objective = function(id, cb) {
   });
 }
 
+/**
+ * creates a new submission associdated with the specified activity
+ * @param data an object with submission attributes
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.add_activity_submission = function(data, cb) {
   var results = null;
   var error = null;
@@ -745,6 +868,11 @@ module.exports.add_activity_submission = function(data, cb) {
   });
 }
 
+/**
+ * returns all submissions belonging to the specified activity from the database
+ * @param activity_id the id of the activity whose submissions are to be fetched
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.get_activity_submissions = function(activity_id, cb) {
   var results = [];
   var error = null;
@@ -771,6 +899,11 @@ module.exports.get_activity_submissions = function(activity_id, cb) {
   });
 }
 
+/**
+ * returns the specified submission from the database
+ * @param id the id of the submission to be fetched
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.get_submission = function(id, cb) {
   var results = null;
   var error = null;
@@ -797,6 +930,10 @@ module.exports.get_submission = function(id, cb) {
   });
 }
 
+/**
+ * returns all submissions from the database
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.get_submissions = function(cb) {
   var results = [];
   var error = null;
@@ -823,6 +960,12 @@ module.exports.get_submissions = function(cb) {
   });
 }
 
+/**
+ * updates the specified submission in the database
+ * @param id the id of the submission to be updated
+ * @param data an object with the submission attributes to be updated
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.update_submission = function(id, data, cb) {
   var results = null;
   var error = null;
@@ -887,6 +1030,11 @@ module.exports.update_submission = function(id, data, cb) {
   });
 }
 
+/**
+ * soft delete the specified submission by setting its deleted attribute to true 
+ * @param id the id of the submission to be soft deleted 
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.soft_delete_submission = function(id, cb) {
   var results = null;
   var error = null;
@@ -919,6 +1067,11 @@ module.exports.soft_delete_submission = function(id, cb) {
   });  
 }
 
+/**
+ * permenantly delete the specified submission from the database 
+ * @param id the id of the submission to be deleted 
+ * @param cb a callback function to be called once the database returns
+ **/
 module.exports.delete_submission = function(id, cb) {
   var results = null;
   var error = null;

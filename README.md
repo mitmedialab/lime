@@ -71,7 +71,8 @@ module.exports.gitlabClientSecret = 'xxxxxxxxxxxxxxxxxxcc1';
 module.exports.gitterClientId = 'xxxxxxxxxxxxxxxxxxdf3';
 module.exports.gitterClientSecret = 'xxxxxxxxxxxxxxxxxx75d';
 
-module.exports.homepageUri = 'http://127.0.0.1:3001'
+module.exports.homepageUri = 'http://127.0.0.1:3001';
+module.exports.sessionSecret = 'super super secret';
 ```
 
 In the first line, the username and password are those you use to access psql. 

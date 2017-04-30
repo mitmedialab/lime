@@ -1,5 +1,17 @@
+// ------------------------------------------------- //
+// The Users Router                                  //
+// The router handling all api cals to /api/v1/users //
+// ------------------------------------------------- //
+
+/** 
+ * Express Imports
+ * @import express the main express web framework
+ * @import router the express router to handle api calls
+ **/
 var express = require('express');
 var router = express.Router();
+
+//Users ORM for manipulating users data
 var User = require('../models/User');
 
 //Create User
@@ -32,7 +44,7 @@ router.post('/', function (req, res, next) {
   });
 });
 
-//Read Users
+//Read Currently Logged In User from sessions
 router.get('/current', function (req, res, next) {
   if (req.session.passport == undefined || req.session.passport.user.id == undefined) {
     // return res.json({
@@ -159,7 +171,7 @@ router.delete('/:user_id', function (req, res, next) {
   });
 });
 
-//Add Course
+//Add User Course
 router.post('/courses/', function (req, res, next) {
   var data = {
     course_id: req.body.course_id,
@@ -180,7 +192,7 @@ router.post('/courses/', function (req, res, next) {
   });
 });
 
-//Read courses
+//Read User Courses
 router.get('/courses/:user_id', function (req, res, next) {
   var user_id = req.params.user_id;
 
@@ -198,7 +210,7 @@ router.get('/courses/:user_id', function (req, res, next) {
   });
 });
 
-//Read submissions
+//Read User Submissions
 router.get('/submissions/:user_id', function (req, res, next) {
   var user_id = req.params.user_id;
 

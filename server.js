@@ -38,7 +38,7 @@ app.use('/api/v1/users', users);
 app.use('/api/v1/activities', activities);
 app.use('/api/v1/announcements', announcements);
 
-//statically serve react build 
+//statically serve react build to the /build uri
 app.use('/build', express.static(path.join(__dirname, '/lemon/build')));
 
 //send all urls following /build/ to the react app for react router to handle

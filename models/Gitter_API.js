@@ -1,44 +1,16 @@
-var request = require('request');
-var axios = require('axios');
+// ------------------------------------------------------------------ //
+// The Gitter Model                                                   //
+// The model for mapping gitter APIs into a JavaScript module methods //
+// ------------------------------------------------------------------ //
+
+//import node-gitter for making gitter api calls
 var Gitter = require('node-gitter');
 
 /**
- *
- * Gitter APIs To Be Added (DB needs to be updated to support these)
- *
- * Create New Room
- * Add user to room
- * Add user to community/group
- * Post in Lobby whenever there is an announcement => at announcement dispatch (need admin page)
- * Course Channel (can't create it by default) => manually create for all added classes => add set of classes to db
- * Add personal portfolio link => link to portfolio 
- * Add link to direct message => https://gitter.im/benbitdiddle12 (github username)
- * 
-**/
-
-// function make_request(method, path, token, data, cb) {
-//   var options = {
-//     method: method,
-//     url: 'https://gitter.im' + path,
-//     headers: {
-//       'Accept': 'application/json',
-//       'Authorization': 'Bearer ' + token
-//     },
-//     data: data
-//   };
-
-//   axios(options)
-//   .then(function(res) {
-//     console.log('axios success');
-//     console.log(res.data);
-//     cb(null, res.data);
-//   }).catch(function(err) {
-//     console.log('axios error');
-//     console.log(err);
-//     cb(err, null);    
-//   });     
-// }
-
+ * returns the user gitter id for the user with the specified token 
+ * @param token the user gitter token to make gitter api calls on their behalf
+ * @param cb a callback function to be called once the gitter api returns
+ **/
 module.exports.get_user_id = function(token, cb) {
   var gitter = new Gitter(token);
 
@@ -53,6 +25,12 @@ module.exports.get_user_id = function(token, cb) {
   });
 }
 
+/**
+ * adds the specified user to the specified room 
+ * @param token the user gitter token to make gitter api calls on their behalf
+ * @param room the name of the room in the ML-LIME gitter community
+ * @param cb a callback function to be called once the gitter api returns
+ **/
 module.exports.add_user_to_room = function(token, room, cb) {
   var gitter = new Gitter(token);
 
@@ -67,7 +45,14 @@ module.exports.add_user_to_room = function(token, room, cb) {
   });
 }
 
-//not tested
+/**
+ * posts a message in a gitter room on a users behalf
+ * @param token the user gitter token to make gitter api calls on their behalf
+ * @param room the name of the room in the ML-LIME gitter community
+ * @param message the message to be posted in the specified room
+ * @param cb a callback function to be called once the gitter api returns
+ **/
+//NOT TESTED OR USED 
 module.exports.post_message_to_room = function(token, room, message, cb) {
   var gitter = new Gitter(token);
 
@@ -82,8 +67,14 @@ module.exports.post_message_to_room = function(token, room, message, cb) {
   });
 }
 
-//not tested
-module.exports.listen_to_room = function(token, roomId, message, cb) {
+/**
+ * returns a log of the messages in a room
+ * @param token the user gitter token to make gitter api calls on their behalf
+ * @param roomId the id of a room in the ML-LIME gitter community
+ * @param cb a callback function to be called once the gitter api returns
+ **/
+//NOT TESTED OR USED 
+module.exports.listen_to_room = function(token, roomId, cb) {
   var gitter = new Gitter(token);
 
   gitter.rooms.find(roomId)

@@ -1,5 +1,16 @@
+// ------------------------------------------------------------------ //
+// The Gitlab Model                                                   //
+// The model for mapping gitlab APIs into a JavaScript module methods //
+// ------------------------------------------------------------------ //
+
+//import axios for making http calls 
 var axios = require('axios');
 
+/**
+ * forks the personal portfolio repository to the user with the specified gitlab token
+ * @param token the user gitlab token to make gitlab api calls on their behalf
+ * @param cb a callback function to be called once the gitlab api returns
+ **/
 var fork_portfolio = function(token, cb) {
   console.log('token: ', token);
   var auth = 'Bearer '+token;
@@ -24,6 +35,11 @@ var fork_portfolio = function(token, cb) {
   }); 
 }
 
+/**
+ * returns the project id of a project with name lime-portfolio
+ * @param token the user gitlab token to make gitlab api calls on their behalf
+ * @param cb a callback function to be called once the gitlab api returns
+ **/
 var get_project_id = function(token, cb) {
   console.log('token: ', token);
   var auth = 'Bearer '+token;
@@ -57,6 +73,16 @@ var get_project_id = function(token, cb) {
   }); 
 }
 
+/**
+ * pushes changes to lime-portfolio on behalf of the user, customizing their portfolio
+ * and triggering gitlab pages to build
+ * @param token the user gitlab token to make gitlab api calls on their behalf
+ * @param project_id the id of the forked project lime-portfolio
+ * @param name the name of the user
+ * @param username the user's gitlab username
+ * @param image_path the path to the user's profile picture
+ * @param cb a callback function to be called once the gitlab api returns
+ **/
 var update_portfolio = function(token, project_id, name, username, image_path, cb) {
   var content = "# Site settings\n\
 title: "+name+"\n\
@@ -120,6 +146,15 @@ exclude: ['README.md', 'Gemfile', 'Gemfile.lock', 'screenshot.png']"
   }); 
 }
 
+/**
+ * forks lime-portfolio into the users gitlab account, customizes it with their
+ * name, username and picture and triggers a pages build
+ * @param token the user gitlab token to make gitlab api calls on their behalf
+ * @param name the name of the user
+ * @param username the user's gitlab username
+ * @param image_path the path to the user's profile picture
+ * @param cb a callback function to be called once the gitlab api returns
+ **/
 module.exports.fork_and_setup_portfolio = function(token, name, username, image_path, cb) {
   get_project_id(token, function(e, proj_id) {
     if(e) {

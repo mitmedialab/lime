@@ -1,34 +1,44 @@
+//passport, sessions and oauth strategies
 var session = require('express-session');
 var passport = require('passport');
-var Strategy = require('passport-github').Strategy;
+// var Strategy = require('passport-github').Strategy;
 var OAuth2Strategy  = require('passport-oauth2');
 var GitlabStrategy  = require('passport-gitlab2');
 
+//Relevant models
 var User = require('./models/User');
 // var Github_API = require('./models/Github_API');
 var Gitlab_API = require('./models/Gitlab_API');
 var Gitter_API = require('./models/Gitter_API');
 
+//Oauth apps ids and secrets
 // var githubClientId = require('./config/index').githubClientId;
 // var githubClientSecret = require('./config/index').githubClientSecret;
 var gitlabClientId = require('./config/index').gitlabClientId;
 var gitlabClientSecret = require('./config/index').gitlabClientSecret;
-var homepageUri = require('./config/index').homepageUri;
 var gitterClientId = require('./config/index').gitterClientId;
 var gitterClientSecret = require('./config/index').gitterClientSecret;
 
+//homepage uri and sessions secret
+var homepageUri = require('./config/index').homepageUri;
+var sessionSecret = require('./config/index').sessionSecret;
+
+//exporting a function that sets up the passport authentication
 module.exports = function (app) {
 
+  //gitlab passport strategy for handling Oauth 
   passport.use(
     new GitlabStrategy({
       clientID: gitlabClientId,
       clientSecret: gitlabClientSecret,
       callbackURL: homepageUri+'/auth/gitlab/callback'
     },function(accessToken, refreshToken, profile, cb) {
+      //Set the role to admin if Noor is the user
       var role = 'scholar';
       if (profile._json.id==1128287) {
         role = 'admin';
       }
+      //extract relevant data from oauth callback to be added to the database
       var data = {
         gitlab_access_token: accessToken,
         id: profile._json.id,
@@ -40,7 +50,7 @@ module.exports = function (app) {
         portfolio: 'https://'+profile._json.username+'.gitlab.io/lime-portfolio',
       }
 
-      console.log('data ', data);
+      //attempt to get the user if this is not their first time logging in
       User.get_user(data.id, function(error, results) {
 
         if (error) {
@@ -50,6 +60,7 @@ module.exports = function (app) {
         if (results) {
           return cb(null, profile);
         } else {
+          //create a new user if their id is not already in the database
           User.create_user(data, function(err, result) {
             if (err) {
               return cb(err, null);
@@ -63,6 +74,7 @@ module.exports = function (app) {
       });
   }));
 
+  //github passport Oauth strategy 
   // passport.use(
   //   new Strategy({
   //     clientID: githubClientId,
@@ -111,6 +123,7 @@ module.exports = function (app) {
   //     });
   // }));
 
+  //gitter passport strategy for handling Oauth 
   passport.use(
     new OAuth2Strategy({
       authorizationURL:   'https://gitter.im/login/oauth/authorize',
@@ -120,14 +133,14 @@ module.exports = function (app) {
       callbackURL:        homepageUri+'/auth/gitter/callback',
       passReqToCallback:  true 
     },function(req, accessToken, refreshToken, profile, done) {
-      console.log('req');
-      console.log(done);
       req.session.gitter_token = accessToken;
+
+      //add the gitter token and chat_link to the user
       User.update_user(req.session.passport.user.id,{gitter_access_token: accessToken, chat_link: 'https://gitter.im/'+req.user.username}, function(err, result) {
         if (err) {
           return done(err, null);
         }
-        //change this a little 
+
         if (result) {
           console.log('success');
           done(null, result);
@@ -136,6 +149,7 @@ module.exports = function (app) {
     }
   ));
 
+  //serialize and deserialize users
   passport.serializeUser(function(user, cb) {
     cb(null, user);
   });
@@ -144,12 +158,14 @@ module.exports = function (app) {
     cb(null, user);
   });
 
+  //setting up session middleware
   app.use(session({ 
-    secret: 'my_precious',
+    secret: sessionSecret,
     resave: true,
     saveUninitialized: true 
   }));
 
+  //telling the app to initialize passport and set up sessions
   app.use(passport.initialize());
   app.use(passport.session());
 }

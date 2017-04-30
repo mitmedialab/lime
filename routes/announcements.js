@@ -1,5 +1,17 @@
+// --------------------------------------------------------- //
+// The Announcements Router                                  //
+// The router handling all api cals to /api/v1/announcements //
+// --------------------------------------------------------- //
+
+/** 
+ * Express Imports
+ * @import express the main express web framework
+ * @import router the express router to handle api calls
+ **/
 var express = require('express');
 var router = express.Router();
+
+//Announcements ORM for manipulating announcements data
 var Announcement = require('../models/Announcement');
 
 //Create Announcement

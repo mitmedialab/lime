@@ -1,10 +1,25 @@
+// --------------------------------------------------------- //
+// The Gitlab API Router                                	   //
+// The router handling all gitlab api cals to /api/v1/gitlab //
+// --------------------------------------------------------- //
+
+/** 
+ * Express Imports
+ * @import express the main express web framework
+ * @import router the express router to handle api calls
+ **/
 var express = require('express');
-var request = require('superagent');
 var router = express.Router();
 
+/** 
+ * ORM Imports
+ * @import Gitlab_API model for accessing gitlab api
+ * @import User model for fetching and manipulating user data 
+ **/
 var Gitlab_API = require('../models/Gitlab_API');
 var User = require('../models/User');
 
+//Fork Portfolio
 router.get('/forkportfolio/:user_id', function(req, res, next) {
 
 	User.get_user(req.params.user_id, function(err, result) {
