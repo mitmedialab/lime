@@ -52,7 +52,7 @@ $ USERNAME=your-psql-username npm run seed
 
 The local database is now set up and seeded.
 
-### Constants  
+### Configuration  
 
 The only thing left to do is to configure the location of the database and gitter and gitlab's ids and secrets. Create an empty file.
 
