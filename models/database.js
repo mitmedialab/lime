@@ -5,7 +5,7 @@ var client = new pg.Client(connectionString);
 client.connect();
 var query = client.query(
   "CREATE TABLE users(																																	\
-  		id 												Numeric 	NOT NULL,																			\
+  		id 												TEXT		 	NOT NULL,																			\
   		gitlab_access_token				TEXT			NOT NULL,																			\
   		github_access_token				TEXT,																										\
   		gitter_access_token				TEXT,																										\
@@ -25,7 +25,7 @@ var query = client.query(
 	  	header 						TEXT				 			NOT NULL,																			\
 	  	message 					TEXT							NOT NULL,																			\
 	  	timestamp 				TEXT				 			NOT NULL,																			\
-	  	user_id						INTEGER						NOT NULL,																			\
+	  	user_id						TEXT							NOT NULL,																			\
 	  	deleted 					BOOL							DEFAULT FALSE,																\
 	  	PRIMARY KEY (id),																  																\
 	  	Foreign KEY (user_id) REFERENCES users(id) ON DELETE CASCADE											\
@@ -45,7 +45,7 @@ var query = client.query(
 																																												\
 		CREATE TABLE users_courses(																													\
 	  	course_id 				INTEGER 					NOT NULL,																			\
-	  	user_id 					INTEGER     			NOT NULL,																			\
+	  	user_id 					TEXT		     			NOT NULL,																			\
 	  	deleted 					BOOL							DEFAULT FALSE,																\
 	  	PRIMARY KEY (course_id, user_id),																									\
 	  	Foreign KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE,		    					\
@@ -60,7 +60,7 @@ var query = client.query(
 	  	chat_link 				TEXT,																														\
 	  	timestamp 				TEXT,																														\
 	  	course_id					INTEGER,																												\
-	  	expert_id					INTEGER,																												\
+	  	expert_id					TEXT,																														\
 	  	deleted 					BOOL							DEFAULT FALSE,																\
 	  	PRIMARY KEY (id),																  																\
 	  	Foreign KEY (course_id) REFERENCES courses(id),																		\
@@ -93,7 +93,7 @@ var query = client.query(
 	  	gdoc_link					TEXT,																														\
 	  	image							TEXT,																														\
 	  	timestamp 				TEXT,																														\
-	  	user_id						INTEGER 					NOT NULL,																			\
+	  	user_id						TEXT		 					NOT NULL,																			\
 	  	activity_id				INTEGER 					NOT NULL,																			\
 	  	deleted 					BOOL							DEFAULT FALSE,																\
 	  	PRIMARY KEY (id),																  																\
