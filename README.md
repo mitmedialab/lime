@@ -10,8 +10,25 @@ Checkout the live version of [LIME](http://lime.media.mit.edu/)
 
 ### Prerequisites
 
-* [node.js](https://nodejs.org/)
-* [postgresql](https://www.postgresql.org/)
+
+| Prerequisite                                         | Version  |
+| ---------------------------------------------------- | -------- |
+| [postgres server](https://www.postgresql.org/)       | `~ ^9.4` |
+| [psql](http://postgresguide.com/utilities/psql.html) | `~ ^9.4` |
+| [Node.js](http://nodejs.org)                         | `~ ^6.10`|
+| npm (comes with Node)                                | `~ ^3.10`|
+
+> _Updating to the latest releases is recommended_.
+
+If Any of these are already installed on your machine, run the following commands to validate the versions:
+
+```shell
+node -v
+npm -v
+psql
+```
+
+If your versions are lower than the prerequisite versions, you should update.
 
 ### Installation
 
