@@ -12,7 +12,7 @@
     "seed": "sed -i.bak s:username:$USERNAME:g config/db_dump && psql -U $USERNAME lime < config/db_dump"
   },
   "dependencies": {
-    "axios": "^0.15.3",
+    "axios": ">=0.18.1",
     "body-parser": "~1.15.2",
     "concurrently": "^3.1.0",
     "cookie-parser": "~1.4.3",
